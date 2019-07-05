@@ -59,8 +59,8 @@ class MainController extends Controller
         $sale->save();
 
         $sale->expenses()->create($request->get('expenses', []));
-        $sale->saleDeposits()->create($request->get('saleDeposits', []));
-        $sale->payables()->create($request->get('paybales', []));
+        $sale->saleDeposits()->create($request->get('sale_deposits', []));
+        $sale->payables()->create($request->get('payables', []));
 
         return 'success!';
     }
@@ -73,7 +73,7 @@ class MainController extends Controller
      */
     public function show($id)
     {
-        //
+        return Sale::with(['saleDeposits', 'payables', 'expenses'])->find($id)->toJson();
     }
 
     /**
@@ -84,7 +84,7 @@ class MainController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Sale::with(['saleDeposits', 'payables', 'expenses'])->find($id)->toJson();
     }
 
     /**
@@ -96,7 +96,30 @@ class MainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sale = Sale::find($id);
+        $sale->price = $request->price;
+        $sale->charge = $request->charge;
+        $sale->dinner = $request->dinner;
+        $sale->dinnerGroup = $request->dinnerGroup;
+        $sale->dinnerPeople = $request->dinnerPeople;
+        $sale->drink = $request->drink;
+        $sale->dt = $request->dt;
+        $sale->food = $request->food;
+        $sale->goal = $request->goal;
+        $sale->lunch = $request->lunch;
+        $sale->lunchGroup = $request->lunchGroup;
+        $sale->lunchPeople = $request->lunchPeople;
+        $sale->party = $request->party;
+        $sale->partyGroup = $request->partyGroup;
+        $sale->partyPeople = $request->partyPeople;
+        $sale->tax = $request->tax;
+        $sale->update();
+
+        $sale->expenses()->update($request->get('expenses', []));
+        $sale->saleDeposits()->update($request->get('sale_deposits', []));
+        $sale->payables()->update($request->get('payables', []));
+
+        return '更新';
     }
 
     /**

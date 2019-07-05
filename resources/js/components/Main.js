@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Table } from "react-bootstrap";
+import { Router, Link } from "react-router-dom";
 import axios from "axios";
 
 class Main extends Component {
@@ -23,10 +24,9 @@ class Main extends Component {
     }
 
     render() {
-        console.log(this.state.sales);
         return (
             <div>
-                <h2>売上日報アプリ</h2>
+                <br />
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -48,7 +48,9 @@ class Main extends Component {
                     {this.state.sales.map(ele => (
                         <tbody>
                             <tr>
-                                <td>{ele.dt}</td>
+                                <td>
+                                    <Link to={"/sale/" + ele.id}>{ele.dt}</Link>
+                                </td>
                                 {/* <td>{ele.price.toLocaleString()}</td>
                                 <td>{ele.tax.toLocaleString()}</td> */}
                                 <td>
