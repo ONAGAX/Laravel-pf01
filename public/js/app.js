@@ -47643,6 +47643,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Main).call(this, props));
     _this.state = {
       edit: false,
+      redirect: false,
       sales: {
         price: "",
         tax: "",
@@ -47701,7 +47702,21 @@ function (_Component) {
       this.setState({
         edit: true
       });
-      console.log("作動");
+    }
+  }, {
+    key: "deleteObject",
+    value: function deleteObject() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.delete("/api/sale/" + this.props.match.params.id).then(function (res) {
+        console.log("消去しました");
+
+        _this3.setState({
+          redirect: true
+        });
+      }).catch(function (err) {
+        console.log(err);
+      });
     }
   }, {
     key: "render",
@@ -47711,6 +47726,10 @@ function (_Component) {
       if (this.state.edit) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
           to: "/sale/" + this.props.match.params.id + "/edit"
+        });
+      } else if (this.state.redirect) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+          to: "/"
         });
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Header, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, sales.dt, "\u306E\u65E5\u5831\u8A73\u7D30")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
@@ -47724,7 +47743,8 @@ function (_Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5BA2\u5358\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u6570\u3000\u3000"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Lunch"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.lunch + 0).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", Math.round(sales.lunch / sales.lunchPeople).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, sales.lunchPeople, "\u4EBA")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
           responsive: "sm"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5BA2\u5358\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u6570\u3000\u3000"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Dinner"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.dinner + 0).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", Math.round(sales.dinner / sales.dinnerPeople).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, sales.dinnerPeople, "\u4EBA"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          variant: "secondary"
+          variant: "secondary",
+          onClick: this.deleteObject.bind(this)
         }, "\u6D88\u53BB\u3059\u308B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "primary",
           onClick: this.changeState.bind(this)

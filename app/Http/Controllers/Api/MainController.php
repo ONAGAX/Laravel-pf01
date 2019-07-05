@@ -130,6 +130,9 @@ class MainController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sale = Sale::find($id);
+        $sale->delete();
+
+        return '消去';
     }
 }

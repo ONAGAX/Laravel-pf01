@@ -9,6 +9,7 @@ class Main extends Component {
         super(props);
         this.state = {
             edit: false,
+            redirect: false,
             sales: {
                 price: "",
                 tax: "",
@@ -60,7 +61,18 @@ class Main extends Component {
 
     changeState() {
         this.setState({ edit: true });
-        console.log("作動");
+    }
+
+    deleteObject() {
+        axios
+            .delete("/api/sale/" + this.props.match.params.id)
+            .then(res => {
+                console.log("消去しました");
+                this.setState({ redirect: true });
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     render() {
@@ -71,6 +83,8 @@ class Main extends Component {
                     to={"/sale/" + this.props.match.params.id + "/edit"}
                 />
             );
+        } else if (this.state.redirect) {
+            return <Redirect to={"/"} />;
         } else {
             return (
                 <div>
@@ -230,7 +244,12 @@ class Main extends Component {
                         </Modal.Body>
 
                         <Modal.Footer>
-                            <Button variant="secondary">消去する</Button>
+                            <Button
+                                variant="secondary"
+                                onClick={this.deleteObject.bind(this)}
+                            >
+                                消去する
+                            </Button>
                             <Button
                                 variant="primary"
                                 onClick={this.changeState.bind(this)}
