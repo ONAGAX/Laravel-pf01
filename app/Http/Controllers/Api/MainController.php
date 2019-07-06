@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaleStoreFomrRequest;
+use App\Http\Requests\SaleUpdateFormRequest;
 
 class MainController extends Controller
 {
@@ -34,8 +36,9 @@ class MainController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaleStoreFomrRequest $request)
     {
+
         // ハッシュまるごと入れる方法を探す
         $sale = new Sale();
         // $sale = $request->get('sales'[]);
@@ -62,7 +65,7 @@ class MainController extends Controller
         $sale->saleDeposits()->create($request->get('sale_deposits', []));
         $sale->payables()->create($request->get('payables', []));
 
-        return 'success!';
+        return response()->json(['status' => 'successful']);
     }
 
     /**
@@ -94,7 +97,7 @@ class MainController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SaleUpdateFormRequest $request, $id)
     {
         $sale = Sale::find($id);
         $sale->price = $request->price;
@@ -119,7 +122,7 @@ class MainController extends Controller
         $sale->saleDeposits()->update($request->get('sale_deposits', []));
         $sale->payables()->update($request->get('payables', []));
 
-        return '更新';
+        return response()->json(['status' => 'successful']);
     }
 
     /**
@@ -133,6 +136,6 @@ class MainController extends Controller
         $sale = Sale::find($id);
         $sale->delete();
 
-        return '消去';
+        return response()->json(['status' => 'successful']);
     }
 }
