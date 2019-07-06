@@ -71,7 +71,6 @@ class Edit extends Component {
             .put("/api/sale/" + this.props.match.params.id, this.state.sales)
             .then(res => {
                 this.setState({ redirect: true });
-                console.log(this.state, res);
             })
             .then(err => {
                 console.log(err);
@@ -120,7 +119,6 @@ class Edit extends Component {
             }
         };
         this.setState({ sales: set_sales });
-        console.log(this.state);
     }
 
     userTyping(type, e) {

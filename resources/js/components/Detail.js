@@ -67,7 +67,6 @@ class Main extends Component {
         axios
             .delete("/api/sale/" + this.props.match.params.id)
             .then(res => {
-                console.log("消去しました");
                 this.setState({ redirect: true });
             })
             .catch(err => {

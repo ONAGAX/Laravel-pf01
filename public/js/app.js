@@ -47709,8 +47709,6 @@ function (_Component) {
       var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_4___default.a.delete("/api/sale/" + this.props.match.params.id).then(function (res) {
-        console.log("消去しました");
-
         _this3.setState({
           redirect: true
         });
@@ -47910,8 +47908,6 @@ function (_Component) {
                   _this3.setState({
                     redirect: true
                   });
-
-                  console.log(_this3.state, res);
                 }).then(function (err) {
                   console.log(err);
                 });
@@ -47972,7 +47968,6 @@ function (_Component) {
       this.setState({
         sales: set_sales
       });
-      console.log(this.state);
     }
   }, {
     key: "userTyping",
@@ -48417,9 +48412,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _SaleTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SaleTable */ "./resources/js/components/SaleTable.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48437,6 +48433,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -48466,7 +48463,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/sale").then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get("/api/sale").then(function (res) {
         _this2.setState({
           sales: res.data
         });
@@ -48477,16 +48474,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
-        striped: true,
-        bordered: true,
-        hover: true,
-        size: "sm"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u8FBC\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A\u76EE\u6A19"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5165\u91D1\u73FE\u91D1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u639B\u30AB\u30FC\u30C9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "FOOD\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "DRINK\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u4EF6\u8CBB"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30E9\u30F3\u30C1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30AB\u30D5\u30A7"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30C7\u30A3\u30CA\u30FC"))), this.state.sales.map(function (ele) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-          to: "/sale/" + ele.id
-        }, ele.dt)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (ele.price + ele.tax).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.goal.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.cash.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.card.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.food / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.drink / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.expenses.personal / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.lunch.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.party.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.dinner.toLocaleString())));
-      })));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SaleTable__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        data: this.state.sales
+      }));
     }
   }]);
 
@@ -49088,6 +49078,189 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (SaleForm);
+
+/***/ }),
+
+/***/ "./resources/js/components/SaleTable.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/SaleTable.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var SaleTable =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(SaleTable, _Component);
+
+  function SaleTable(props) {
+    var _this;
+
+    _classCallCheck(this, SaleTable);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SaleTable).call(this, props));
+    _this.state = {
+      select: false,
+      data: []
+    };
+    return _this;
+  }
+
+  _createClass(SaleTable, [{
+    key: "handleSortByAsc",
+    value: function handleSortByAsc() {
+      if (this.state.select) {
+        var _line = this.state.data.sort(function (a, b) {
+          if (a.dt < b.dt) return -1;
+          if (a.dt > b.dt) return 1;
+          return 0;
+        });
+      }
+
+      var line = this.props.data.sort(function (a, b) {
+        if (a.dt < b.dt) return -1;
+        if (a.dt > b.dt) return 1;
+        return 0;
+      });
+      this.setState({
+        data: line
+      });
+      this.setState({
+        select: true
+      });
+    }
+  }, {
+    key: "handleSortByDesc",
+    value: function handleSortByDesc() {
+      if (this.state.select) {
+        var _line2 = this.state.data.sort(function (a, b) {
+          if (a.dt < b.dt) return 1;
+          if (a.dt > b.dt) return -1;
+          return 0;
+        });
+      }
+
+      var line = this.props.data.sort(function (a, b) {
+        if (a.dt < b.dt) return 1;
+        if (a.dt > b.dt) return -1;
+        return 0;
+      });
+      this.setState({
+        data: line
+      });
+      this.setState({
+        select: true
+      });
+    }
+  }, {
+    key: "handleFilter",
+    value: function handleFilter(e) {
+      var line = this.props.data.filter(function (item) {
+        var date = item.dt.split("-").join("");
+
+        if (date.indexOf(e) > -1) {
+          return true;
+        }
+      });
+      this.setState({
+        data: line
+      });
+      this.setState({
+        select: true
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var list;
+
+      if (this.state.select) {
+        list = this.state.data.map(function (data) {
+          return data;
+        });
+      } else {
+        list = this.props.data.map(function (data) {
+          return data;
+        });
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
+        as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Col"],
+        md: "4",
+        controlId: "validationCustom01"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Label, null, "\u65E5\u4ED8\u691C\u7D22"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Control, {
+        required: true,
+        type: "number",
+        onChange: function onChange(e) {
+          _this2.handleFilter(e.target.value);
+        },
+        placeholder: "\u4F8B)20190501"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        style: {
+          marginLeft: "15px"
+        },
+        variant: "primary",
+        onClick: function onClick(e) {
+          _this2.handleSortByAsc();
+        }
+      }, "\u964D\u9806"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        style: {
+          marginLeft: "10px"
+        },
+        variant: "primary",
+        onClick: function onClick(e) {
+          _this2.handleSortByDesc();
+        }
+      }, "\u6607\u9806")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
+        striped: true,
+        bordered: true,
+        hover: true,
+        size: "sm"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u8FBC\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A\u76EE\u6A19"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5165\u91D1\u73FE\u91D1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u639B\u30AB\u30FC\u30C9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "FOOD\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "DRINK\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u4EF6\u8CBB"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30E9\u30F3\u30C1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30AB\u30D5\u30A7"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30C7\u30A3\u30CA\u30FC"))), list.map(function (ele) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+          to: "/sale/" + ele.id
+        }, ele.dt)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (ele.price + ele.tax).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.goal.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.cash.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.card.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.food / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.drink / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.expenses.personal / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.lunch.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.party.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.dinner.toLocaleString())));
+      })));
+    }
+  }]);
+
+  return SaleTable;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (SaleTable);
 
 /***/ }),
 

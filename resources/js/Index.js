@@ -21,9 +21,6 @@ class Index extends Component {
                             <Link to="/form">日報入力</Link>
                         </Nav>
                     </Navbar>
-                    {/* <Router> */}
-                    {/* <Link to="/">Home</Link>
-                    <Link to="/form">Form</Link> */}
                     <Route exact path="/" component={Main} />
                     <Route exact path="/form" component={SaleForm} />
                     <Route exact path="/sale/:id" component={Detail} />
