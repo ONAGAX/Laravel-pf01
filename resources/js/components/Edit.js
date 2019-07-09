@@ -9,7 +9,7 @@ class Edit extends Component {
         super();
         this.state = {
             edit: false,
-            edit_sales: [],
+            validated: false,
             sales: {
                 price: "",
                 tax: "",
@@ -225,7 +225,6 @@ class Edit extends Component {
     }
 
     render() {
-        // 日付(YYYY-MM-DD)分解結合
         const dates = this.state.sales.dt.split("-").join("");
         const { validated } = this.state;
         const { sales } = this.state;

@@ -47820,7 +47820,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Edit).call(this));
     _this.state = {
       edit: false,
-      edit_sales: [],
+      validated: false,
       sales: {
         price: "",
         tax: "",
@@ -48136,7 +48136,6 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      // 日付(YYYY-MM-DD)分解結合
       var dates = this.state.sales.dt.split("-").join("");
       var validated = this.state.validated;
       var sales = this.state.sales;

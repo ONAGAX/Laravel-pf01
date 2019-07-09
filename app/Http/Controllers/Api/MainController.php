@@ -78,7 +78,6 @@ class MainController extends Controller
             $sale->$ele = $request->$ele;
         }
         $sale->update();
-
         $sale->expenses()->update($request->get('expenses', []));
         $sale->saleDeposits()->update($request->get('sale_deposits', []));
         $sale->payables()->update($request->get('payables', []));
