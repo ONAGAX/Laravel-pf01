@@ -47869,8 +47869,6 @@ function (_Component) {
         _this2.setState({
           sales: res.data
         });
-
-        console.log(_this2.state.sales);
       }).catch(function (err) {
         console.log(err);
       });
@@ -47907,7 +47905,6 @@ function (_Component) {
                 return this.changeState();
 
               case 8:
-                console.log(this.state);
                 axios__WEBPACK_IMPORTED_MODULE_5___default.a.put("/api/sale/" + this.props.match.params.id, this.state.sales).then(function (res) {
                   _this3.setState({
                     redirect: true
@@ -47916,7 +47913,7 @@ function (_Component) {
                   console.log(err);
                 });
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -47989,7 +47986,6 @@ function (_Component) {
       this.setState({
         sales: set_sales
       });
-      console.log(this.state);
     }
   }, {
     key: "userTyping",
@@ -49274,7 +49270,9 @@ function (_Component) {
         hover: true,
         size: "sm"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u8FBC\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A\u76EE\u6A19"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5165\u91D1\u73FE\u91D1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u639B\u30AB\u30FC\u30C9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "FOOD\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "DRINK\u539F\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u4EF6\u8CBB"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30E9\u30F3\u30C1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30AB\u30D5\u30A7"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u30C7\u30A3\u30CA\u30FC"))), list.map(function (ele) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", {
+          key: ele.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
           to: "/sale/" + ele.id
         }, ele.dt)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (ele.price + ele.tax).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.goal.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.cash.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.sale_deposits.card.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.food / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.payables.drink / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, Math.round(ele.expenses.personal / ele.price * 100), "%"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.lunch.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.party.toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, ele.dinner.toLocaleString())));
       })));

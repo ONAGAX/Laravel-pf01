@@ -53,7 +53,6 @@ class Edit extends Component {
             .get("/api/sale/" + this.props.match.params.id)
             .then(res => {
                 this.setState({ sales: res.data });
-                console.log(this.state.sales);
             })
             .catch(err => {
                 console.log(err);
@@ -69,7 +68,6 @@ class Edit extends Component {
         }
         this.setState({ validated: true });
         await this.changeState();
-        console.log(this.state);
         axios
             .put("/api/sale/" + this.props.match.params.id, this.state.sales)
             .then(res => {
@@ -150,7 +148,6 @@ class Edit extends Component {
             dt: this.state.dt
         };
         this.setState({ sales: set_sales });
-        console.log(this.state);
     }
 
     userTyping(type, e) {

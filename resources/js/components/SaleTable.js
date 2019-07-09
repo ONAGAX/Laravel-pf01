@@ -118,7 +118,7 @@ class SaleTable extends Component {
                         </tr>
                     </thead>
                     {list.map(ele => (
-                        <tbody>
+                        <tbody key={ele.id}>
                             <tr>
                                 <td>
                                     <Link to={"/sale/" + ele.id}>{ele.dt}</Link>
