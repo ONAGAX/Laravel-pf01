@@ -47820,7 +47820,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Edit).call(this));
     _this.state = {
       edit: false,
-      validated: false,
+      edit_sales: [],
       sales: {
         price: "",
         tax: "",
@@ -47990,8 +47990,6 @@ function (_Component) {
   }, {
     key: "userTyping",
     value: function userTyping(type, e) {
-      var sales = this.state.sales;
-
       switch (type) {
         case "dt":
           this.setState({
@@ -48136,6 +48134,7 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
+      // 日付(YYYY-MM-DD)分解結合
       var dates = this.state.sales.dt.split("-").join("");
       var validated = this.state.validated;
       var sales = this.state.sales;
@@ -49160,21 +49159,26 @@ function (_Component) {
     key: "handleSortByAsc",
     value: function handleSortByAsc() {
       if (this.state.select) {
-        var _line = this.state.data.sort(function (a, b) {
+        var line = this.state.data.sort(function (a, b) {
           if (a.dt < b.dt) return -1;
           if (a.dt > b.dt) return 1;
           return 0;
         });
+        this.setState({
+          data: line
+        });
+      } else {
+        var _line = this.props.data.sort(function (a, b) {
+          if (a.dt < b.dt) return -1;
+          if (a.dt > b.dt) return 1;
+          return 0;
+        });
+
+        this.setState({
+          data: _line
+        });
       }
 
-      var line = this.props.data.sort(function (a, b) {
-        if (a.dt < b.dt) return -1;
-        if (a.dt > b.dt) return 1;
-        return 0;
-      });
-      this.setState({
-        data: line
-      });
       this.setState({
         select: true
       });
@@ -49183,21 +49187,26 @@ function (_Component) {
     key: "handleSortByDesc",
     value: function handleSortByDesc() {
       if (this.state.select) {
-        var _line2 = this.state.data.sort(function (a, b) {
+        var line = this.state.data.sort(function (a, b) {
           if (a.dt < b.dt) return 1;
           if (a.dt > b.dt) return -1;
           return 0;
         });
+        this.setState({
+          data: line
+        });
+      } else {
+        var _line2 = this.props.data.sort(function (a, b) {
+          if (a.dt < b.dt) return 1;
+          if (a.dt > b.dt) return -1;
+          return 0;
+        });
+
+        this.setState({
+          data: _line2
+        });
       }
 
-      var line = this.props.data.sort(function (a, b) {
-        if (a.dt < b.dt) return 1;
-        if (a.dt > b.dt) return -1;
-        return 0;
-      });
-      this.setState({
-        data: line
-      });
       this.setState({
         select: true
       });

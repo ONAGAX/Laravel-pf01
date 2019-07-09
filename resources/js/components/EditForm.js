@@ -4,17 +4,16 @@ import { Form, Col, Button } from "react-bootstrap";
 import { Link, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 
-class Edit extends Component {
-    constructor() {
-        super();
+class EditForm extends Component {
+    constructor(props) {
+        super(props);
         this.state = {
-            edit: false,
-            edit_sales: [],
+            validated: false,
             sales: {
                 price: "",
                 tax: "",
                 goal: "",
-                lunch: "",
+                lunch: "66666",
                 lunchGroup: "",
                 lunchPeople: "",
                 dinner: "",
@@ -48,17 +47,6 @@ class Edit extends Component {
         };
     }
 
-    componentDidMount() {
-        axios
-            .get("/api/sale/" + this.props.match.params.id)
-            .then(res => {
-                this.setState({ sales: res.data });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-
     async handleSubmit(e) {
         e.preventDefault();
         const form = e.currentTarget;
@@ -79,78 +67,22 @@ class Edit extends Component {
     }
 
     changeState() {
-        const dis = this.state;
-        // 冗長すぎる、mapで回す方法を考える
-        dis.p_food ? dis.p_food : (dis.p_food = dis.sales.payables.food);
-        dis.p_drink ? dis.p_drink : (dis.p_drink = dis.sales.payables.drink);
-        dis.s_cash ? dis.s_cash : (dis.s_cash = dis.sales.sale_deposits.cash);
-        dis.s_card ? dis.s_card : (dis.s_card = dis.sales.sale_deposits.card);
-        dis.s_receivable
-            ? dis.s_receivable
-            : (dis.s_receivable = dis.sales.sale_deposits.receivable);
-        dis.price ? dis.price : (dis.price = dis.sales.price);
-        dis.tax ? dis.tax : (dis.tax = dis.sales.tax);
-        dis.goal ? dis.goal : (dis.goal = dis.sales.goal);
-        dis.lunch ? dis.lunch : (dis.lunch = dis.sales.lunch);
-        dis.lunchGroup
-            ? dis.lunchGroup
-            : (dis.lunchGroup = dis.sales.lunchGroup);
-        dis.lunchPeople
-            ? dis.lunchPeople
-            : (dis.lunchPeople = dis.sales.lunchPeople);
-        dis.dinner ? dis.dinner : (dis.dinner = dis.sales.dinner);
-        dis.dinnerGroup
-            ? dis.dinnerGroup
-            : (dis.dinnerGroup = dis.sales.dinnerGroup);
-        dis.dinnerPeople
-            ? dis.dinnerPeople
-            : (dis.dinnerPeople = dis.sales.dinnerPeople);
-        dis.party ? dis.party : (dis.party = dis.sales.party);
-        dis.partyGroup
-            ? dis.partyGroup
-            : (dis.partyGroup = dis.sales.partyGroup);
-        dis.partyPeople
-            ? dis.partyPeople
-            : (dis.partyPeople = dis.sales.partyPeople);
-        dis.food ? dis.food : (dis.food = dis.sales.food);
-        dis.drink ? dis.drink : (dis.drink = dis.sales.drink);
-        dis.charge ? dis.chager : (dis.charge = dis.sales.charge);
-        dis.dt ? dis.dt : (dis.dt = dis.sales.dt);
-
-        let set_sales = {
-            sale_deposits: {
-                cash: dis.s_cash,
-                card: dis.s_card,
-                receivable: dis.s_receivable
-            },
-            payables: {
-                food: dis.p_food,
-                drink: dis.p_drink
-            },
-            expenses: {
-                personal: dis.sales.expenses.personal
-            },
-            price: this.state.price,
-            tax: this.state.tax,
-            goal: this.state.goal,
-            lunch: this.state.lunch,
-            lunchGroup: this.state.lunchGroup,
-            lunchPeople: this.state.lunchPeople,
-            dinner: this.state.dinner,
-            dinnerGroup: this.state.dinnerGroup,
-            dinnerPeople: this.state.dinnerPeople,
-            party: this.state.party,
-            partyGroup: this.state.partyGroup,
-            partyPeople: this.state.partyPeople,
-            food: this.state.food,
-            drink: this.state.drink,
-            charge: this.state.charge,
-            dt: this.state.dt
+        let set_deposits = {
+            cash: this.state.s_cash,
+            card: this.state.s_card,
+            receivable: this.state.s_receivable
         };
-        this.setState({ sales: set_sales });
+        let set_payables = {
+            food: this.state.p_food,
+            drink: this.state.p_drink
+        };
+        this.setState({ sale_deposits: set_deposits });
+        this.setState({ payables: set_payables });
     }
 
     userTyping(type, e) {
+        console.log(this.state);
+        let name = e.target.name;
         switch (type) {
             case "dt":
                 this.setState({ dt: this.state.sales.dt });
@@ -174,7 +106,7 @@ class Edit extends Component {
                 this.setState({ goal: e.target.value });
                 return;
             case "lunch":
-                this.setState({ lunch: e.target.value });
+                this.setState({ [name]: e.target.value });
                 return;
             case "lunch_group":
                 this.setState({ lunchGroup: e.target.value });
@@ -224,18 +156,11 @@ class Edit extends Component {
     }
 
     render() {
-        // 日付(YYYY-MM-DD)分解結合
-        const dates = this.state.sales.dt.split("-").join("");
+        const dates = this.props.sales.dt.split("-").join("");
         const { validated } = this.state;
-        const { sales } = this.state;
-        const { redirect } = this.state;
-
-        if (redirect) {
-            return <Redirect to="/" />;
-        }
+        const { sales } = this.props;
         return (
             <div>
-                <h4>再編集モード [{sales.dt}]</h4>
                 <Form
                     noValidate
                     validated={validated}
@@ -362,7 +287,8 @@ class Edit extends Component {
                             <Form.Label>Lunch売上</Form.Label>
                             <Form.Control
                                 required
-                                defaultValue={sales.lunch}
+                                name="lunch"
+                                value={this.state.lunch}
                                 type="number"
                                 onChange={e => {
                                     this.userTyping("lunch", e);
@@ -601,4 +527,4 @@ class Edit extends Component {
     }
 }
 
-export default Edit;
+export default EditForm;

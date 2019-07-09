@@ -19,13 +19,15 @@ class SaleTable extends Component {
                 if (a.dt > b.dt) return 1;
                 return 0;
             });
+            this.setState({ data: line });
+        } else {
+            const line = this.props.data.sort((a, b) => {
+                if (a.dt < b.dt) return -1;
+                if (a.dt > b.dt) return 1;
+                return 0;
+            });
+            this.setState({ data: line });
         }
-        const line = this.props.data.sort((a, b) => {
-            if (a.dt < b.dt) return -1;
-            if (a.dt > b.dt) return 1;
-            return 0;
-        });
-        this.setState({ data: line });
         this.setState({ select: true });
     }
     handleSortByDesc() {
@@ -35,13 +37,15 @@ class SaleTable extends Component {
                 if (a.dt > b.dt) return -1;
                 return 0;
             });
+            this.setState({ data: line });
+        } else {
+            const line = this.props.data.sort((a, b) => {
+                if (a.dt < b.dt) return 1;
+                if (a.dt > b.dt) return -1;
+                return 0;
+            });
+            this.setState({ data: line });
         }
-        const line = this.props.data.sort((a, b) => {
-            if (a.dt < b.dt) return 1;
-            if (a.dt > b.dt) return -1;
-            return 0;
-        });
-        this.setState({ data: line });
         this.setState({ select: true });
     }
     handleFilter(e) {
