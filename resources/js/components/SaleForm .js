@@ -149,6 +149,12 @@ class SaleForm extends Component {
         }
     }
 
+    handleOnInput(e, n) {
+        if (e.target.value.length > n) {
+            e.target.value = e.target.value.slice(0, n);
+        }
+    }
+
     render() {
         const { validated } = this.state;
         const { redirect } = this.state;
@@ -174,6 +180,9 @@ class SaleForm extends Component {
                             <Form.Label>日付</Form.Label>
                             <Form.Control
                                 required
+                                onInput={e => {
+                                    this.handleOnInput(e, 8);
+                                }}
                                 type="number"
                                 onChange={e => {
                                     this.userTyping("dt", e);

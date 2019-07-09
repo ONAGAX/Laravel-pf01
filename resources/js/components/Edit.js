@@ -250,6 +250,7 @@ class Edit extends Component {
                             <Form.Label>日付</Form.Label>
                             <Form.Control
                                 required
+                                disabled="disabled"
                                 value={dates}
                                 type="number"
                                 onChange={e => {

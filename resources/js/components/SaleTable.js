@@ -6,6 +6,7 @@ import { Router, Link } from "react-router-dom";
 class SaleTable extends Component {
     constructor(props) {
         super(props);
+        this.form = React.createRef();
         this.state = {
             select: false,
             data: []
@@ -58,6 +59,10 @@ class SaleTable extends Component {
         this.setState({ data: line });
         this.setState({ select: true });
     }
+    handleClear() {
+        this.form.current.reset();
+        this.setState({ data: this.props.data });
+    }
 
     render() {
         let list;
@@ -73,7 +78,7 @@ class SaleTable extends Component {
 
         return (
             <div>
-                <Form>
+                <Form ref={this.form}>
                     <Form.Group as={Col} md="4" controlId="validationCustom01">
                         <Form.Label>日付検索</Form.Label>
                         <Form.Control
@@ -102,6 +107,15 @@ class SaleTable extends Component {
                         }}
                     >
                         昇順
+                    </Button>
+                    <Button
+                        style={{ marginLeft: "10px" }}
+                        variant="success"
+                        onClick={e => {
+                            this.handleClear();
+                        }}
+                    >
+                        クリア
                     </Button>
                 </Form>
                 <br />

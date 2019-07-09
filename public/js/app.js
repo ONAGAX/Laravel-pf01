@@ -48158,6 +48158,7 @@ function (_Component) {
         controlId: "validationCustom01"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Label, null, "\u65E5\u4ED8"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Control, {
         required: true,
+        disabled: "disabled",
         value: dates,
         type: "number",
         onChange: function onChange(e) {
@@ -48816,6 +48817,13 @@ function (_Component) {
       }
     }
   }, {
+    key: "handleOnInput",
+    value: function handleOnInput(e, n) {
+      if (e.target.value.length > n) {
+        e.target.value = e.target.value.slice(0, n);
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this3 = this;
@@ -48841,6 +48849,9 @@ function (_Component) {
         controlId: "validationCustom01"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Label, null, "\u65E5\u4ED8"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Control, {
         required: true,
+        onInput: function onInput(e) {
+          _this3.handleOnInput(e, 8);
+        },
         type: "number",
         onChange: function onChange(e) {
           _this3.userTyping("dt", e);
@@ -49148,6 +49159,7 @@ function (_Component) {
     _classCallCheck(this, SaleTable);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SaleTable).call(this, props));
+    _this.form = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     _this.state = {
       select: false,
       data: []
@@ -49229,6 +49241,14 @@ function (_Component) {
       });
     }
   }, {
+    key: "handleClear",
+    value: function handleClear() {
+      this.form.current.reset();
+      this.setState({
+        data: this.props.data
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -49245,7 +49265,9 @@ function (_Component) {
         });
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"], {
+        ref: this.form
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
         as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Col"],
         md: "4",
         controlId: "validationCustom01"
@@ -49272,7 +49294,15 @@ function (_Component) {
         onClick: function onClick(e) {
           _this2.handleSortByDesc();
         }
-      }, "\u6607\u9806")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
+      }, "\u6607\u9806"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        style: {
+          marginLeft: "10px"
+        },
+        variant: "success",
+        onClick: function onClick(e) {
+          _this2.handleClear();
+        }
+      }, "\u30AF\u30EA\u30A2")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
         striped: true,
         bordered: true,
         hover: true,
