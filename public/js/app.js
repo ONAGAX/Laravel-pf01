@@ -48729,13 +48729,13 @@ function (_Component) {
 
         case "lunch_group":
           this.setState({
-            lunch_group: e.target.value
+            lunchGroup: e.target.value
           });
           return;
 
         case "lunch_people":
           this.setState({
-            lunch_people: e.target.value
+            lunchPeople: e.target.value
           });
           return;
 
@@ -48747,13 +48747,13 @@ function (_Component) {
 
         case "cafe_group":
           this.setState({
-            party_group: e.target.value
+            partyGroup: e.target.value
           });
           return;
 
         case "cafe_people":
           this.setState({
-            party_people: e.target.value
+            partyPeople: e.target.value
           });
           return;
 
@@ -48765,13 +48765,13 @@ function (_Component) {
 
         case "dinner_group":
           this.setState({
-            dinner_group: e.target.value
+            dinnerGroup: e.target.value
           });
           return;
 
         case "dinner_people":
           this.setState({
-            dinner_people: e.target.value
+            dinnerPeople: e.target.value
           });
           return;
 

@@ -103,28 +103,28 @@ class SaleForm extends Component {
                 this.setState({ lunch: e.target.value });
                 return;
             case "lunch_group":
-                this.setState({ lunch_group: e.target.value });
+                this.setState({ lunchGroup: e.target.value });
                 return;
             case "lunch_people":
-                this.setState({ lunch_people: e.target.value });
+                this.setState({ lunchPeople: e.target.value });
                 return;
             case "cafe":
                 this.setState({ party: e.target.value });
                 return;
             case "cafe_group":
-                this.setState({ party_group: e.target.value });
+                this.setState({ partyGroup: e.target.value });
                 return;
             case "cafe_people":
-                this.setState({ party_people: e.target.value });
+                this.setState({ partyPeople: e.target.value });
                 return;
             case "dinner":
                 this.setState({ dinner: e.target.value });
                 return;
             case "dinner_group":
-                this.setState({ dinner_group: e.target.value });
+                this.setState({ dinnerGroup: e.target.value });
                 return;
             case "dinner_people":
-                this.setState({ dinner_people: e.target.value });
+                this.setState({ dinnerPeople: e.target.value });
                 return;
             case "food":
                 this.setState({ food: e.target.value });

@@ -21,16 +21,6 @@ class MainController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,29 +28,12 @@ class MainController extends Controller
      */
     public function store(SaleStoreFomrRequest $request)
     {
-
-        // ハッシュまるごと入れる方法を探す
         $sale = new Sale();
-        // $sale = $request->get('sales'[]);
-        $sale->price = $request->price;
-        $sale->charge = $request->charge;
-        $sale->dinner = $request->dinner;
-        $sale->dinnerGroup = $request->dinner_group;
-        $sale->dinnerPeople = $request->dinner_people;
-        $sale->drink = $request->drink;
-        $sale->dt = $request->dt;
-        $sale->food = $request->food;
-        $sale->goal = $request->goal;
-        $sale->lunch = $request->lunch;
-        $sale->lunchGroup = $request->lunch_group;
-        $sale->lunchPeople = $request->lunch_people;
-        $sale->party = $request->party;
-        $sale->partyGroup = $request->party_group;
-        $sale->partyPeople = $request->party_people;
-        $sale->tax = $request->tax;
-
+        $list = array('price', 'charge', 'dinner', 'dinnerGroup', 'dinnerPeople', 'drink', 'dt', 'food', 'goal', 'lunch', 'lunchGroup', 'lunchPeople', 'party', 'partyGroup', 'partyPeople', 'tax');
+        foreach ($list as $ele) {
+            $sale->$ele = $request->$ele;
+        }
         $sale->save();
-
         $sale->expenses()->create($request->get('expenses', []));
         $sale->saleDeposits()->create($request->get('sale_deposits', []));
         $sale->payables()->create($request->get('payables', []));
@@ -100,22 +73,10 @@ class MainController extends Controller
     public function update(SaleUpdateFormRequest $request, $id)
     {
         $sale = Sale::find($id);
-        $sale->price = $request->price;
-        $sale->charge = $request->charge;
-        $sale->dinner = $request->dinner;
-        $sale->dinnerGroup = $request->dinnerGroup;
-        $sale->dinnerPeople = $request->dinnerPeople;
-        $sale->drink = $request->drink;
-        $sale->dt = $request->dt;
-        $sale->food = $request->food;
-        $sale->goal = $request->goal;
-        $sale->lunch = $request->lunch;
-        $sale->lunchGroup = $request->lunchGroup;
-        $sale->lunchPeople = $request->lunchPeople;
-        $sale->party = $request->party;
-        $sale->partyGroup = $request->partyGroup;
-        $sale->partyPeople = $request->partyPeople;
-        $sale->tax = $request->tax;
+        $list = array('price', 'charge', 'dinner', 'dinnerGroup', 'dinnerPeople', 'drink', 'dt', 'food', 'goal', 'lunch', 'lunchGroup', 'lunchPeople', 'party', 'partyGroup', 'partyPeople', 'tax');
+        foreach ($list as $ele) {
+            $sale->$ele = $request->$ele;
+        }
         $sale->update();
 
         $sale->expenses()->update($request->get('expenses', []));
