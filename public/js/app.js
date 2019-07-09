@@ -47820,6 +47820,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Edit).call(this));
     _this.state = {
       edit: false,
+      edit_sales: [],
       sales: {
         price: "",
         tax: "",
@@ -47868,6 +47869,8 @@ function (_Component) {
         _this2.setState({
           sales: res.data
         });
+
+        console.log(_this2.state.sales);
       }).catch(function (err) {
         console.log(err);
       });
@@ -47904,6 +47907,7 @@ function (_Component) {
                 return this.changeState();
 
               case 8:
+                console.log(this.state);
                 axios__WEBPACK_IMPORTED_MODULE_5___default.a.put("/api/sale/" + this.props.match.params.id, this.state.sales).then(function (res) {
                   _this3.setState({
                     redirect: true
@@ -47912,7 +47916,7 @@ function (_Component) {
                   console.log(err);
                 });
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -47929,49 +47933,69 @@ function (_Component) {
   }, {
     key: "changeState",
     value: function changeState() {
-      var sales = this.state.sales;
-      sales.p_food ? sales.p_food : sales.p_food = sales.payables.food;
-      sales.p_drink ? sales.p_drink : sales.p_drink = sales.payables.drink;
-      sales.s_cash ? sales.s_cash : sales.s_cash = sales.sale_deposits.cash;
-      sales.s_card ? sales.s_card : sales.s_card = sales.sale_deposits.card;
-      sales.s_receivable ? sales.s_receivable : sales.s_receivable = sales.sale_deposits.receivable;
+      var dis = this.state; // 冗長すぎる、mapで回す方法を考える
+
+      dis.p_food ? dis.p_food : dis.p_food = dis.sales.payables.food;
+      dis.p_drink ? dis.p_drink : dis.p_drink = dis.sales.payables.drink;
+      dis.s_cash ? dis.s_cash : dis.s_cash = dis.sales.sale_deposits.cash;
+      dis.s_card ? dis.s_card : dis.s_card = dis.sales.sale_deposits.card;
+      dis.s_receivable ? dis.s_receivable : dis.s_receivable = dis.sales.sale_deposits.receivable;
+      dis.price ? dis.price : dis.price = dis.sales.price;
+      dis.tax ? dis.tax : dis.tax = dis.sales.tax;
+      dis.goal ? dis.goal : dis.goal = dis.sales.goal;
+      dis.lunch ? dis.lunch : dis.lunch = dis.sales.lunch;
+      dis.lunchGroup ? dis.lunchGroup : dis.lunchGroup = dis.sales.lunchGroup;
+      dis.lunchPeople ? dis.lunchPeople : dis.lunchPeople = dis.sales.lunchPeople;
+      dis.dinner ? dis.dinner : dis.dinner = dis.sales.dinner;
+      dis.dinnerGroup ? dis.dinnerGroup : dis.dinnerGroup = dis.sales.dinnerGroup;
+      dis.dinnerPeople ? dis.dinnerPeople : dis.dinnerPeople = dis.sales.dinnerPeople;
+      dis.party ? dis.party : dis.party = dis.sales.party;
+      dis.partyGroup ? dis.partyGroup : dis.partyGroup = dis.sales.partyGroup;
+      dis.partyPeople ? dis.partyPeople : dis.partyPeople = dis.sales.partyPeople;
+      dis.food ? dis.food : dis.food = dis.sales.food;
+      dis.drink ? dis.drink : dis.drink = dis.sales.drink;
+      dis.charge ? dis.chager : dis.charge = dis.sales.charge;
+      dis.dt ? dis.dt : dis.dt = dis.sales.dt;
       var set_sales = {
         sale_deposits: {
-          cash: sales.s_cash,
-          card: sales.s_card,
-          receivable: sales.s_receivable
+          cash: dis.s_cash,
+          card: dis.s_card,
+          receivable: dis.s_receivable
         },
         payables: {
-          food: sales.p_food,
-          drink: sales.p_drink
+          food: dis.p_food,
+          drink: dis.p_drink
         },
-        price: sales.price,
-        tax: sales.tax,
-        goal: sales.goal,
-        lunch: sales.lunch,
-        lunchGroup: sales.lunchGroup,
-        lunchPeople: sales.lunchPeople,
-        dinner: sales.dinner,
-        dinnerGroup: sales.dinnerGroup,
-        dinnerPeople: sales.dinnerPeople,
-        party: sales.party,
-        partyGroup: sales.partyGroup,
-        partyPeople: sales.partyPeople,
-        food: sales.food,
-        drink: sales.drink,
-        charge: sales.charge,
-        dt: sales.dt,
         expenses: {
-          personal: sales.expenses.personal
-        }
+          personal: dis.sales.expenses.personal
+        },
+        price: this.state.price,
+        tax: this.state.tax,
+        goal: this.state.goal,
+        lunch: this.state.lunch,
+        lunchGroup: this.state.lunchGroup,
+        lunchPeople: this.state.lunchPeople,
+        dinner: this.state.dinner,
+        dinnerGroup: this.state.dinnerGroup,
+        dinnerPeople: this.state.dinnerPeople,
+        party: this.state.party,
+        partyGroup: this.state.partyGroup,
+        partyPeople: this.state.partyPeople,
+        food: this.state.food,
+        drink: this.state.drink,
+        charge: this.state.charge,
+        dt: this.state.dt
       };
       this.setState({
         sales: set_sales
       });
+      console.log(this.state);
     }
   }, {
     key: "userTyping",
     value: function userTyping(type, e) {
+      var sales = this.state.sales;
+
       switch (type) {
         case "dt":
           this.setState({
@@ -48140,7 +48164,7 @@ function (_Component) {
         controlId: "validationCustom01"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Label, null, "\u65E5\u4ED8"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"].Control, {
         required: true,
-        defaultValue: dates,
+        value: dates,
         type: "number",
         onChange: function onChange(e) {
           _this4.userTyping("dt", e);

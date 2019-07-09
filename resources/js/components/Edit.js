@@ -9,6 +9,7 @@ class Edit extends Component {
         super();
         this.state = {
             edit: false,
+            edit_sales: [],
             sales: {
                 price: "",
                 tax: "",
@@ -52,6 +53,7 @@ class Edit extends Component {
             .get("/api/sale/" + this.props.match.params.id)
             .then(res => {
                 this.setState({ sales: res.data });
+                console.log(this.state.sales);
             })
             .catch(err => {
                 console.log(err);
@@ -67,6 +69,7 @@ class Edit extends Component {
         }
         this.setState({ validated: true });
         await this.changeState();
+        console.log(this.state);
         axios
             .put("/api/sale/" + this.props.match.params.id, this.state.sales)
             .then(res => {
@@ -78,50 +81,80 @@ class Edit extends Component {
     }
 
     changeState() {
-        const { sales } = this.state;
-
-        sales.p_food ? sales.p_food : (sales.p_food = sales.payables.food);
-        sales.p_drink ? sales.p_drink : (sales.p_drink = sales.payables.drink);
-        sales.s_cash ? sales.s_cash : (sales.s_cash = sales.sale_deposits.cash);
-        sales.s_card ? sales.s_card : (sales.s_card = sales.sale_deposits.card);
-        sales.s_receivable
-            ? sales.s_receivable
-            : (sales.s_receivable = sales.sale_deposits.receivable);
+        const dis = this.state;
+        // 冗長すぎる、mapで回す方法を考える
+        dis.p_food ? dis.p_food : (dis.p_food = dis.sales.payables.food);
+        dis.p_drink ? dis.p_drink : (dis.p_drink = dis.sales.payables.drink);
+        dis.s_cash ? dis.s_cash : (dis.s_cash = dis.sales.sale_deposits.cash);
+        dis.s_card ? dis.s_card : (dis.s_card = dis.sales.sale_deposits.card);
+        dis.s_receivable
+            ? dis.s_receivable
+            : (dis.s_receivable = dis.sales.sale_deposits.receivable);
+        dis.price ? dis.price : (dis.price = dis.sales.price);
+        dis.tax ? dis.tax : (dis.tax = dis.sales.tax);
+        dis.goal ? dis.goal : (dis.goal = dis.sales.goal);
+        dis.lunch ? dis.lunch : (dis.lunch = dis.sales.lunch);
+        dis.lunchGroup
+            ? dis.lunchGroup
+            : (dis.lunchGroup = dis.sales.lunchGroup);
+        dis.lunchPeople
+            ? dis.lunchPeople
+            : (dis.lunchPeople = dis.sales.lunchPeople);
+        dis.dinner ? dis.dinner : (dis.dinner = dis.sales.dinner);
+        dis.dinnerGroup
+            ? dis.dinnerGroup
+            : (dis.dinnerGroup = dis.sales.dinnerGroup);
+        dis.dinnerPeople
+            ? dis.dinnerPeople
+            : (dis.dinnerPeople = dis.sales.dinnerPeople);
+        dis.party ? dis.party : (dis.party = dis.sales.party);
+        dis.partyGroup
+            ? dis.partyGroup
+            : (dis.partyGroup = dis.sales.partyGroup);
+        dis.partyPeople
+            ? dis.partyPeople
+            : (dis.partyPeople = dis.sales.partyPeople);
+        dis.food ? dis.food : (dis.food = dis.sales.food);
+        dis.drink ? dis.drink : (dis.drink = dis.sales.drink);
+        dis.charge ? dis.chager : (dis.charge = dis.sales.charge);
+        dis.dt ? dis.dt : (dis.dt = dis.sales.dt);
 
         let set_sales = {
             sale_deposits: {
-                cash: sales.s_cash,
-                card: sales.s_card,
-                receivable: sales.s_receivable
+                cash: dis.s_cash,
+                card: dis.s_card,
+                receivable: dis.s_receivable
             },
             payables: {
-                food: sales.p_food,
-                drink: sales.p_drink
+                food: dis.p_food,
+                drink: dis.p_drink
             },
-            price: sales.price,
-            tax: sales.tax,
-            goal: sales.goal,
-            lunch: sales.lunch,
-            lunchGroup: sales.lunchGroup,
-            lunchPeople: sales.lunchPeople,
-            dinner: sales.dinner,
-            dinnerGroup: sales.dinnerGroup,
-            dinnerPeople: sales.dinnerPeople,
-            party: sales.party,
-            partyGroup: sales.partyGroup,
-            partyPeople: sales.partyPeople,
-            food: sales.food,
-            drink: sales.drink,
-            charge: sales.charge,
-            dt: sales.dt,
             expenses: {
-                personal: sales.expenses.personal
-            }
+                personal: dis.sales.expenses.personal
+            },
+            price: this.state.price,
+            tax: this.state.tax,
+            goal: this.state.goal,
+            lunch: this.state.lunch,
+            lunchGroup: this.state.lunchGroup,
+            lunchPeople: this.state.lunchPeople,
+            dinner: this.state.dinner,
+            dinnerGroup: this.state.dinnerGroup,
+            dinnerPeople: this.state.dinnerPeople,
+            party: this.state.party,
+            partyGroup: this.state.partyGroup,
+            partyPeople: this.state.partyPeople,
+            food: this.state.food,
+            drink: this.state.drink,
+            charge: this.state.charge,
+            dt: this.state.dt
         };
         this.setState({ sales: set_sales });
+        console.log(this.state);
     }
 
     userTyping(type, e) {
+        const { sales } = this.state;
         switch (type) {
             case "dt":
                 this.setState({ dt: this.state.sales.dt });
@@ -221,7 +254,7 @@ class Edit extends Component {
                             <Form.Label>日付</Form.Label>
                             <Form.Control
                                 required
-                                defaultValue={dates}
+                                value={dates}
                                 type="number"
                                 onChange={e => {
                                     this.userTyping("dt", e);
