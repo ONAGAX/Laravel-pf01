@@ -30,7 +30,7 @@ class CreateSalesTable extends Migration
             $table->integer('food');
             $table->integer('drink');
             $table->integer('charge');
-            $table->date('dt');
+            $table->date('dt')->unique();
             $table->timestamps();
         });
     }

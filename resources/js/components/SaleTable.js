@@ -8,6 +8,7 @@ class SaleTable extends Component {
         super(props);
         this.form = React.createRef();
         this.state = {
+            isOrder: false,
             select: false,
             data: []
         };
@@ -30,6 +31,7 @@ class SaleTable extends Component {
             this.setState({ data: line });
         }
         this.setState({ select: true });
+        this.handleReverce();
     }
     handleSortByDesc() {
         if (this.state.select) {
@@ -48,6 +50,7 @@ class SaleTable extends Component {
             this.setState({ data: line });
         }
         this.setState({ select: true });
+        this.handleReverce();
     }
     handleFilter(e) {
         const line = this.props.data.filter(item => {
@@ -63,6 +66,9 @@ class SaleTable extends Component {
         this.form.current.reset();
         this.setState({ data: this.props.data });
     }
+    handleReverce() {
+        this.setState({ isOrder: !this.state.isOrder });
+    }
 
     render() {
         let list;
@@ -74,6 +80,32 @@ class SaleTable extends Component {
             list = this.props.data.map(data => {
                 return data;
             });
+        }
+        let orderHtml;
+        if (this.state.isOrder) {
+            orderHtml = (
+                <Button
+                    style={{ marginLeft: "15px" }}
+                    variant="outline-success"
+                    onClick={e => {
+                        this.handleSortByAsc();
+                    }}
+                >
+                    降順 ▼
+                </Button>
+            );
+        } else {
+            orderHtml = (
+                <Button
+                    style={{ marginLeft: "15px" }}
+                    variant="outline-success"
+                    onClick={e => {
+                        this.handleSortByDesc();
+                    }}
+                >
+                    昇順 ▲
+                </Button>
+            );
         }
 
         return (
@@ -90,24 +122,8 @@ class SaleTable extends Component {
                             placeholder="例)20190501"
                         />
                     </Form.Group>
-                    <Button
-                        style={{ marginLeft: "15px" }}
-                        variant="outline-success"
-                        onClick={e => {
-                            this.handleSortByAsc();
-                        }}
-                    >
-                        降順
-                    </Button>
-                    <Button
-                        style={{ marginLeft: "10px" }}
-                        variant="outline-success"
-                        onClick={e => {
-                            this.handleSortByDesc();
-                        }}
-                    >
-                        昇順
-                    </Button>
+
+                    {orderHtml}
                     <Button
                         style={{ marginLeft: "10px" }}
                         variant="outline-secondary"

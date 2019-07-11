@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Form, Col, Button, Container, Modal } from "react-bootstrap";
-import SaleTable from "./SaleTable";
+import styles from "./styles.scss";
 
 import { Router, Link } from "react-router-dom";
 import Axios from "axios";
@@ -62,7 +62,7 @@ class Auth extends Component {
 
     render() {
         return (
-            <div>
+            <div className="auth">
                 <Col md={{ span: 6, offset: 3 }}>
                     <Container>
                         <Form
@@ -70,6 +70,10 @@ class Auth extends Component {
                                 this.handleSubmit(e);
                             }}
                         >
+                            <h5 style={{ textAline: "center" }}>
+                                ログインフォーム
+                            </h5>
+                            <hr />
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>メールアドレス</Form.Label>
                                 <Form.Control
@@ -93,8 +97,12 @@ class Auth extends Component {
                                     }}
                                 />
                             </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Submit
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                className="w-100 mt-2"
+                            >
+                                ログイン
                             </Button>
                         </Form>
                         <Modal.Dialog>

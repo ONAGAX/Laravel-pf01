@@ -17,7 +17,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        return Sale::with(['saleDeposits', 'payables', 'expenses'])->get()->toJson();
+        return Sale::with(['saleDeposits', 'payables', 'expenses'])->orderBy('dt', 'asc')->get()->toJson();
     }
 
     /**
