@@ -33,6 +33,10 @@ class Index extends Component {
             });
     }
 
+    ImportWindowOpen() {
+        window.open("sales", "window1", "width=300,height=150,scrollbars=1");
+    }
+
     render() {
         let routeHtml;
         if (this.state.isLogin === true) {
@@ -42,13 +46,22 @@ class Index extends Component {
                         <Navbar.Brand>売上日報アプリ</Navbar.Brand>
                         <span>
                             {" "}
-                            ({this.state.currentUser.name}
-                            さんでログイン済み)　　
+                            {this.state.currentUser.name}
+                            さんでログイン中　　
                         </span>
                         <Nav className="mr-auto">
-                            <Link to="/">Home</Link>
+                            <Link to="/">一覧へ戻る</Link>
                             <Nav.Link />
                             <Link to="/form">日報入力</Link>
+                            <Nav.Link />
+                            <Link
+                                to=""
+                                onClick={e => {
+                                    this.ImportWindowOpen(e);
+                                }}
+                            >
+                                CSVインポート
+                            </Link>
                         </Nav>
                         <Button
                             variant="default"

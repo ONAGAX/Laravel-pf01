@@ -13,6 +13,7 @@
 ## 使用したライブラリ
 
 -   composer JWT-auth
+-   composer maatwebsite/excel (LaravelExcel)
 -   npm react-router-dom
 -   npm axios
 -   npm react-bootstrap

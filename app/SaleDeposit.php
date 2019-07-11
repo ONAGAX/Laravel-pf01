@@ -10,7 +10,8 @@ class SaleDeposit extends Model
     protected $fillable = [
         'cash',
         'card',
-        'receivable'
+        'receivable',
+        'sale_id'
     ];
 
     public function sale()

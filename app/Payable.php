@@ -8,7 +8,8 @@ class Payable extends Model
 {
     protected $fillable = [
         'food',
-        'drink'
+        'drink',
+        'sale_id'
     ];
 
     public function sale()
