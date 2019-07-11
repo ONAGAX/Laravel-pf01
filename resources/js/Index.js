@@ -13,9 +13,15 @@ class Index extends Component {
     constructor() {
         super();
         this.state = {
-            isLogin: false
+            isLogin: false,
+            currentUser: []
         };
     }
+
+    getState(ele) {
+        this.setState({ currentUser: ele, isLogin: true });
+    }
+
     render() {
         let routeHtml;
         if (this.state.isLogin === true) {
@@ -23,6 +29,11 @@ class Index extends Component {
                 <div>
                     <Navbar bg="light" variant="light">
                         <Navbar.Brand>売上日報アプリ</Navbar.Brand>
+                        <span>
+                            {" "}
+                            ({this.state.currentUser.name}
+                            さんでログイン済み)　　
+                        </span>
                         <Nav className="mr-auto">
                             <Link to="/">Home</Link>
                             <Nav.Link />
@@ -39,9 +50,14 @@ class Index extends Component {
             routeHtml = (
                 <div>
                     <Navbar bg="light" variant="light">
-                        <Navbar.Brand>売上日報アプリ (未ログイン)</Navbar.Brand>
+                        <Navbar.Brand>売上日報アプリ</Navbar.Brand>
+                        <span> (未ログイン)</span>
                     </Navbar>
-                    <Route exact path="/" component={Auth} />
+                    <Auth
+                        handleGetState={e => {
+                            this.getState(e);
+                        }}
+                    />
                 </div>
             );
         }
