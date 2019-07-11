@@ -48171,6 +48171,11 @@ function (_Component) {
       });
     }
   }, {
+    key: "ImportWindowOpen",
+    value: function ImportWindowOpen() {
+      window.open("sales", "window1", "width=300,height=150,scrollbars=1");
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this3 = this;
@@ -48187,7 +48192,12 @@ function (_Component) {
           to: "/"
         }, "\u4E00\u89A7\u3078\u623B\u308B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/form"
-        }, "\u65E5\u5831\u5165\u529B")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        }, "\u65E5\u5831\u5165\u529B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
+          to: "",
+          onClick: function onClick(e) {
+            _this3.ImportWindowOpen(e);
+          }
+        }, "CSV\u30A4\u30F3\u30DD\u30FC\u30C8")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "default",
           onClick: function onClick(e) {
             _this3.handleLogout();

@@ -15,14 +15,14 @@
   <div class="container">
     <div class="content">
 
-      <div class="title">payables table</div>
+      <div class="title">payables table 3/4</div>
     </div>
 
     <form role="form" method="post" action="payable" enctype="multipart/form-data">
       {{ csrf_field() }}
       <input type="file" name="csv_file" id="csv_file">
       <div class="form-group">
-        <button type="submit" class="">保存</button>
+        <button type="submit" class="">インポート</button>
       </div>
     </form>
 

@@ -33,6 +33,10 @@ class Index extends Component {
             });
     }
 
+    ImportWindowOpen() {
+        window.open("sales", "window1", "width=300,height=150,scrollbars=1");
+    }
+
     render() {
         let routeHtml;
         if (this.state.isLogin === true) {
@@ -49,6 +53,15 @@ class Index extends Component {
                             <Link to="/">一覧へ戻る</Link>
                             <Nav.Link />
                             <Link to="/form">日報入力</Link>
+                            <Nav.Link />
+                            <Link
+                                to=""
+                                onClick={e => {
+                                    this.ImportWindowOpen(e);
+                                }}
+                            >
+                                CSVインポート
+                            </Link>
                         </Nav>
                         <Button
                             variant="default"

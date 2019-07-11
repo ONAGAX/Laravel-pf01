@@ -18,5 +18,7 @@ class PayableController extends Controller
         $file = $request->file('csv_file');
 
         Excel::import(new PayableImport, $file);
+
+        return redirect('/expense');
     }
 }

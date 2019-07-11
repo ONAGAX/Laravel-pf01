@@ -22,3 +22,4 @@ Route::resource('/sales', 'SaleController');
 Route::resource('/saledeposit', 'SaleDepositController');
 Route::resource('/payable', 'PayableController');
 Route::resource('/expense', 'ExpenseController');
+Route::resource('/close', 'CloseController');

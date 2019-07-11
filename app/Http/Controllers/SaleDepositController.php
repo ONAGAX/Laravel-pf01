@@ -18,5 +18,7 @@ class SaleDepositController extends Controller
         $file = $request->file('csv_file');
 
         Excel::import(new SaleDepositImport, $file);
+
+        return redirect('/payable');
     }
 }

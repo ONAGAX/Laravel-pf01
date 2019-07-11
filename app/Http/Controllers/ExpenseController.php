@@ -18,5 +18,7 @@ class ExpenseController extends Controller
         $file = $request->file('csv_file');
 
         Excel::import(new ExpenseImport, $file);
+
+        return redirect('/close');
     }
 }
