@@ -48181,11 +48181,11 @@ function (_Component) {
         routeHtml = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"], {
           bg: "light",
           variant: "light"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"].Brand, null, "\u58F2\u4E0A\u65E5\u5831\u30A2\u30D7\u30EA"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, " ", "(", this.state.currentUser.name, "\u3055\u3093\u3067\u30ED\u30B0\u30A4\u30F3\u6E08\u307F)\u3000\u3000"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"].Brand, null, "\u58F2\u4E0A\u65E5\u5831\u30A2\u30D7\u30EA"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, " ", this.state.currentUser.name, "\u3055\u3093\u3067\u30ED\u30B0\u30A4\u30F3\u4E2D\u3000\u3000"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"], {
           className: "mr-auto"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/"
-        }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
+        }, "\u4E00\u89A7\u3078\u623B\u308B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/form"
         }, "\u65E5\u5831\u5165\u529B")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "default",

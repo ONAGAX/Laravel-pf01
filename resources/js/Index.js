@@ -42,11 +42,11 @@ class Index extends Component {
                         <Navbar.Brand>売上日報アプリ</Navbar.Brand>
                         <span>
                             {" "}
-                            ({this.state.currentUser.name}
-                            さんでログイン済み)　　
+                            {this.state.currentUser.name}
+                            さんでログイン中　　
                         </span>
                         <Nav className="mr-auto">
-                            <Link to="/">Home</Link>
+                            <Link to="/">一覧へ戻る</Link>
                             <Nav.Link />
                             <Link to="/form">日報入力</Link>
                         </Nav>
