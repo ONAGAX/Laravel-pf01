@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Form, Col, Button, Container } from "react-bootstrap";
+import { Form, Col, Button, Container, Modal } from "react-bootstrap";
 import SaleTable from "./SaleTable";
 
 import { Router, Link } from "react-router-dom";
@@ -61,7 +61,6 @@ class Auth extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <div>
                 <Col md={{ span: 6, offset: 3 }}>
@@ -74,6 +73,7 @@ class Auth extends Component {
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>メールアドレス</Form.Label>
                                 <Form.Control
+                                    required
                                     type="email"
                                     placeholder="アドレスを入力"
                                     onChange={e => {
@@ -85,6 +85,7 @@ class Auth extends Component {
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>パスワード</Form.Label>
                                 <Form.Control
+                                    required
                                     type="password"
                                     placeholder="パスワードを入力"
                                     onChange={e => {
@@ -96,6 +97,13 @@ class Auth extends Component {
                                 Submit
                             </Button>
                         </Form>
+                        <Modal.Dialog>
+                            <Modal.Body>
+                                <p>テストアカウントご用意ございます</p>
+                                <p>email | admin@test.com</p>
+                                <p>password | testtest</p>
+                            </Modal.Body>
+                        </Modal.Dialog>
                     </Container>
                 </Col>
             </div>

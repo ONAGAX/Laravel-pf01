@@ -92,7 +92,7 @@ class SaleTable extends Component {
                     </Form.Group>
                     <Button
                         style={{ marginLeft: "15px" }}
-                        variant="primary"
+                        variant="outline-success"
                         onClick={e => {
                             this.handleSortByAsc();
                         }}
@@ -101,7 +101,7 @@ class SaleTable extends Component {
                     </Button>
                     <Button
                         style={{ marginLeft: "10px" }}
-                        variant="primary"
+                        variant="outline-success"
                         onClick={e => {
                             this.handleSortByDesc();
                         }}
@@ -110,7 +110,7 @@ class SaleTable extends Component {
                     </Button>
                     <Button
                         style={{ marginLeft: "10px" }}
-                        variant="success"
+                        variant="outline-secondary"
                         onClick={e => {
                             this.handleClear();
                         }}

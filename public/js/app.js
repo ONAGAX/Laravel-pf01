@@ -47541,9 +47541,24 @@ function (_Component) {
       });
     }
   }, {
+    key: "handleLogout",
+    value: function handleLogout() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_9___default.a.post("/api/logout").then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_9___default.a.defaults.headers.common["Authorization"] = "";
+
+        _this2.setState({
+          isLogin: false
+        });
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var routeHtml;
 
@@ -47557,7 +47572,12 @@ function (_Component) {
           to: "/"
         }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/form"
-        }, "\u65E5\u5831\u5165\u529B"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Route"], {
+        }, "\u65E5\u5831\u5165\u529B")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+          variant: "default",
+          onClick: function onClick(e) {
+            _this3.handleLogout();
+          }
+        }, "\u30ED\u30B0\u30A2\u30A6\u30C8")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Route"], {
           exact: true,
           path: "/",
           component: _components_Main__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -47580,7 +47600,7 @@ function (_Component) {
           variant: "light"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"].Brand, null, "\u58F2\u4E0A\u65E5\u5831\u30A2\u30D7\u30EA"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, " (\u672A\u30ED\u30B0\u30A4\u30F3)")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Auth__WEBPACK_IMPORTED_MODULE_7__["default"], {
           handleGetState: function handleGetState(e) {
-            _this2.getState(e);
+            _this3.getState(e);
           }
         }));
       }
@@ -47749,7 +47769,6 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      console.log(this.state);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
         md: {
           span: 6,
@@ -47762,6 +47781,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
         controlId: "formBasicEmail"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Label, null, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Control, {
+        required: true,
         type: "email",
         placeholder: "\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B",
         onChange: function onChange(e) {
@@ -47770,6 +47790,7 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Group, {
         controlId: "formBasicPassword"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Label, null, "\u30D1\u30B9\u30EF\u30FC\u30C9"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Form"].Control, {
+        required: true,
         type: "password",
         placeholder: "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5165\u529B",
         onChange: function onChange(e) {
@@ -47778,7 +47799,7 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
         variant: "primary",
         type: "submit"
-      }, "Submit")))));
+      }, "Submit")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30C6\u30B9\u30C8\u30A2\u30AB\u30A6\u30F3\u30C8\u3054\u7528\u610F\u3054\u3056\u3044\u307E\u3059"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "email | admin@test.com"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "password | testtest"))))));
     }
   }]);
 
@@ -49482,7 +49503,7 @@ function (_Component) {
         style: {
           marginLeft: "15px"
         },
-        variant: "primary",
+        variant: "outline-success",
         onClick: function onClick(e) {
           _this2.handleSortByAsc();
         }
@@ -49490,7 +49511,7 @@ function (_Component) {
         style: {
           marginLeft: "10px"
         },
-        variant: "primary",
+        variant: "outline-success",
         onClick: function onClick(e) {
           _this2.handleSortByDesc();
         }
@@ -49498,7 +49519,7 @@ function (_Component) {
         style: {
           marginLeft: "10px"
         },
-        variant: "success",
+        variant: "outline-secondary",
         onClick: function onClick(e) {
           _this2.handleClear();
         }

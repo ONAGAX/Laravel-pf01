@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Table, Navbar, Nav } from "react-bootstrap";
+import { Table, Navbar, Nav, Button } from "react-bootstrap";
 import Main from "./components/Main";
 import SaleForm from "./components/SaleForm ";
 import Detail from "./components/Detail";
 import Edit from "./components/Edit";
 import Auth from "./components/Auth";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import axios from "axios";
+import Axios from "axios";
 
 class Index extends Component {
     constructor() {
@@ -20,6 +20,17 @@ class Index extends Component {
 
     getState(ele) {
         this.setState({ currentUser: ele, isLogin: true });
+    }
+
+    handleLogout() {
+        Axios.post("/api/logout")
+            .then(res => {
+                Axios.defaults.headers.common["Authorization"] = "";
+                this.setState({ isLogin: false });
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     render() {
@@ -39,6 +50,14 @@ class Index extends Component {
                             <Nav.Link />
                             <Link to="/form">日報入力</Link>
                         </Nav>
+                        <Button
+                            variant="default"
+                            onClick={e => {
+                                this.handleLogout();
+                            }}
+                        >
+                            ログアウト
+                        </Button>
                     </Navbar>
                     <Route exact path="/" component={Main} />
                     <Route exact path="/form" component={SaleForm} />
