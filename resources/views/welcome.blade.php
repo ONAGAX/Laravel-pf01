@@ -16,7 +16,7 @@
 <body>
 
 </body>
-<div id="example"></div>
+<div id="index"></div>
 <script src="js/app.js"></script>
 
 </html>

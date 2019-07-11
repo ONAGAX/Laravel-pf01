@@ -18,3 +18,10 @@ use Illuminate\Http\Request;
 // });
 
 Route::resource('sale', 'Api\MainController');
+
+Route::post('/login', 'AuthController@login');
+
+Route::group(['middleware' => 'auth:api'], function () {
+  Route::get('/me', 'AuthController@me');
+  Route::post('/logout', 'AuthController@logout');
+});
