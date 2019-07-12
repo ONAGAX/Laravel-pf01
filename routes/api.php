@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::resource('sale', 'Api\MainController');
+Route::post('search/', 'Api\SearchController@index');
 
 Route::post('/login', 'AuthController@login');
 

@@ -48190,14 +48190,14 @@ function (_Component) {
           className: "mr-auto"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/"
-        }, "\u4E00\u89A7\u3078\u623B\u308B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
+        }, "\u4E00\u89A7"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "/form"
-        }, "\u65E5\u5831\u5165\u529B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
+        }, "\u5165\u529B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__["Link"], {
           to: "",
           onClick: function onClick(e) {
             _this3.ImportWindowOpen(e);
           }
-        }, "CSV\u30A4\u30F3\u30DD\u30FC\u30C8")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        }, "CSV")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "default",
           onClick: function onClick(e) {
             _this3.handleLogout();
@@ -49326,7 +49326,8 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Main).call(this));
     _this.state = {
-      sales: []
+      sales: [],
+      dt: ""
     };
     return _this;
   }
@@ -49336,7 +49337,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get("/api/sale").then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/search/", this.state).then(function (res) {
         _this2.setState({
           sales: res.data
         });
@@ -50165,7 +50166,7 @@ function (_Component) {
         onChange: function onChange(e) {
           _this2.handleFilter(e.target.value);
         },
-        placeholder: "\u4F8B)20190501"
+        placeholder: "\u4F8B)0501"
       })), orderHtml, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
         style: {
           marginLeft: "10px"

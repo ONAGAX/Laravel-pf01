@@ -50,9 +50,9 @@ class Index extends Component {
                             さんでログイン中　　
                         </span>
                         <Nav className="mr-auto">
-                            <Link to="/">一覧へ戻る</Link>
+                            <Link to="/">一覧</Link>
                             <Nav.Link />
-                            <Link to="/form">日報入力</Link>
+                            <Link to="/form">入力</Link>
                             <Nav.Link />
                             <Link
                                 to=""
@@ -60,7 +60,7 @@ class Index extends Component {
                                     this.ImportWindowOpen(e);
                                 }}
                             >
-                                CSVインポート
+                                CSV
                             </Link>
                         </Nav>
                         <Button

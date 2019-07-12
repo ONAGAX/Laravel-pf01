@@ -119,7 +119,7 @@ class SaleTable extends Component {
                             onChange={e => {
                                 this.handleFilter(e.target.value);
                             }}
-                            placeholder="例)20190501"
+                            placeholder="例)0501"
                         />
                     </Form.Group>
 

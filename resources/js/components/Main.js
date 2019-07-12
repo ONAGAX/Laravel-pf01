@@ -10,13 +10,14 @@ class Main extends Component {
     constructor() {
         super();
         this.state = {
-            sales: []
+            sales: [],
+            dt: ""
         };
     }
 
     componentDidMount() {
         axios
-            .get("/api/sale")
+            .post("/api/search/", this.state)
             .then(res => {
                 this.setState({ sales: res.data });
             })
