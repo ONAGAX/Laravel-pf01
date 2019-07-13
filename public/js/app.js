@@ -2980,6 +2980,982 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
+/***/ "./node_modules/create-react-class/factory.js":
+/*!****************************************************!*\
+  !*** ./node_modules/create-react-class/factory.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+
+var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ "./node_modules/fbjs/lib/emptyObject.js");
+var _invariant = __webpack_require__(/*! fbjs/lib/invariant */ "./node_modules/fbjs/lib/invariant.js");
+
+if (true) {
+  var warning = __webpack_require__(/*! fbjs/lib/warning */ "./node_modules/fbjs/lib/warning.js");
+}
+
+var MIXINS_KEY = 'mixins';
+
+// Helper function to allow the creation of anonymous functions which do not
+// have .name set to the name of the variable being assigned to.
+function identity(fn) {
+  return fn;
+}
+
+var ReactPropTypeLocationNames;
+if (true) {
+  ReactPropTypeLocationNames = {
+    prop: 'prop',
+    context: 'context',
+    childContext: 'child context'
+  };
+} else {}
+
+function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+  /**
+   * Policies that describe methods in `ReactClassInterface`.
+   */
+
+  var injectedMixins = [];
+
+  /**
+   * Composite components are higher-level components that compose other composite
+   * or host components.
+   *
+   * To create a new type of `ReactClass`, pass a specification of
+   * your new class to `React.createClass`. The only requirement of your class
+   * specification is that you implement a `render` method.
+   *
+   *   var MyComponent = React.createClass({
+   *     render: function() {
+   *       return <div>Hello World</div>;
+   *     }
+   *   });
+   *
+   * The class specification supports a specific protocol of methods that have
+   * special meaning (e.g. `render`). See `ReactClassInterface` for
+   * more the comprehensive protocol. Any other properties and methods in the
+   * class specification will be available on the prototype.
+   *
+   * @interface ReactClassInterface
+   * @internal
+   */
+  var ReactClassInterface = {
+    /**
+     * An array of Mixin objects to include when defining your component.
+     *
+     * @type {array}
+     * @optional
+     */
+    mixins: 'DEFINE_MANY',
+
+    /**
+     * An object containing properties and methods that should be defined on
+     * the component's constructor instead of its prototype (static methods).
+     *
+     * @type {object}
+     * @optional
+     */
+    statics: 'DEFINE_MANY',
+
+    /**
+     * Definition of prop types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    propTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    contextTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types this component sets for its children.
+     *
+     * @type {object}
+     * @optional
+     */
+    childContextTypes: 'DEFINE_MANY',
+
+    // ==== Definition methods ====
+
+    /**
+     * Invoked when the component is mounted. Values in the mapping will be set on
+     * `this.props` if that prop is not specified (i.e. using an `in` check).
+     *
+     * This method is invoked before `getInitialState` and therefore cannot rely
+     * on `this.state` or use `this.setState`.
+     *
+     * @return {object}
+     * @optional
+     */
+    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Invoked once before the component is mounted. The return value will be used
+     * as the initial value of `this.state`.
+     *
+     *   getInitialState: function() {
+     *     return {
+     *       isOn: false,
+     *       fooBaz: new BazFoo()
+     *     }
+     *   }
+     *
+     * @return {object}
+     * @optional
+     */
+    getInitialState: 'DEFINE_MANY_MERGED',
+
+    /**
+     * @return {object}
+     * @optional
+     */
+    getChildContext: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Uses props from `this.props` and state from `this.state` to render the
+     * structure of the component.
+     *
+     * No guarantees are made about when or how often this method is invoked, so
+     * it must not have side effects.
+     *
+     *   render: function() {
+     *     var name = this.props.name;
+     *     return <div>Hello, {name}!</div>;
+     *   }
+     *
+     * @return {ReactComponent}
+     * @required
+     */
+    render: 'DEFINE_ONCE',
+
+    // ==== Delegate methods ====
+
+    /**
+     * Invoked when the component is initially created and about to be mounted.
+     * This may have side effects, but any external subscriptions or data created
+     * by this method must be cleaned up in `componentWillUnmount`.
+     *
+     * @optional
+     */
+    componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component has been mounted and has a DOM representation.
+     * However, there is no guarantee that the DOM node is in the document.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been mounted (initialized and rendered) for the first time.
+     *
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked before the component receives new props.
+     *
+     * Use this as an opportunity to react to a prop transition by updating the
+     * state using `this.setState`. Current props are accessed via `this.props`.
+     *
+     *   componentWillReceiveProps: function(nextProps, nextContext) {
+     *     this.setState({
+     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+     *     });
+     *   }
+     *
+     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+     * transition may cause a state change, but the opposite is not true. If you
+     * need it, you are probably looking for `componentWillUpdate`.
+     *
+     * @param {object} nextProps
+     * @optional
+     */
+    componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Invoked while deciding if the component should be updated as a result of
+     * receiving new props, state and/or context.
+     *
+     * Use this as an opportunity to `return false` when you're certain that the
+     * transition to the new props/state/context will not require a component
+     * update.
+     *
+     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+     *     return !equal(nextProps, this.props) ||
+     *       !equal(nextState, this.state) ||
+     *       !equal(nextContext, this.context);
+     *   }
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @return {boolean} True if the component should update.
+     * @optional
+     */
+    shouldComponentUpdate: 'DEFINE_ONCE',
+
+    /**
+     * Invoked when the component is about to update due to a transition from
+     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+     * and `nextContext`.
+     *
+     * Use this as an opportunity to perform preparation before an update occurs.
+     *
+     * NOTE: You **cannot** use `this.setState()` in this method.
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @param {ReactReconcileTransaction} transaction
+     * @optional
+     */
+    componentWillUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component's DOM representation has been updated.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been updated.
+     *
+     * @param {object} prevProps
+     * @param {?object} prevState
+     * @param {?object} prevContext
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component is about to be removed from its parent and have
+     * its DOM representation destroyed.
+     *
+     * Use this as an opportunity to deallocate any external resources.
+     *
+     * NOTE: There is no `componentDidUnmount` since your component will have been
+     * destroyed by that point.
+     *
+     * @optional
+     */
+    componentWillUnmount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillMount`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillReceiveProps`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Replacement for (deprecated) `componentWillUpdate`.
+     *
+     * @optional
+     */
+    UNSAFE_componentWillUpdate: 'DEFINE_MANY',
+
+    // ==== Advanced methods ====
+
+    /**
+     * Updates the component's currently mounted DOM representation.
+     *
+     * By default, this implements React's rendering and reconciliation algorithm.
+     * Sophisticated clients may wish to override this.
+     *
+     * @param {ReactReconcileTransaction} transaction
+     * @internal
+     * @overridable
+     */
+    updateComponent: 'OVERRIDE_BASE'
+  };
+
+  /**
+   * Similar to ReactClassInterface but for static methods.
+   */
+  var ReactClassStaticInterface = {
+    /**
+     * This method is invoked after a component is instantiated and when it
+     * receives new props. Return an object to update state in response to
+     * prop changes. Return null to indicate no change to state.
+     *
+     * If an object is returned, its keys will be merged into the existing state.
+     *
+     * @return {object || null}
+     * @optional
+     */
+    getDerivedStateFromProps: 'DEFINE_MANY_MERGED'
+  };
+
+  /**
+   * Mapping from class specification keys to special processing functions.
+   *
+   * Although these are declared like instance properties in the specification
+   * when defining classes using `React.createClass`, they are actually static
+   * and are accessible on the constructor instead of the prototype. Despite
+   * being static, they must be defined outside of the "statics" key under
+   * which all other static methods are defined.
+   */
+  var RESERVED_SPEC_KEYS = {
+    displayName: function(Constructor, displayName) {
+      Constructor.displayName = displayName;
+    },
+    mixins: function(Constructor, mixins) {
+      if (mixins) {
+        for (var i = 0; i < mixins.length; i++) {
+          mixSpecIntoComponent(Constructor, mixins[i]);
+        }
+      }
+    },
+    childContextTypes: function(Constructor, childContextTypes) {
+      if (true) {
+        validateTypeDef(Constructor, childContextTypes, 'childContext');
+      }
+      Constructor.childContextTypes = _assign(
+        {},
+        Constructor.childContextTypes,
+        childContextTypes
+      );
+    },
+    contextTypes: function(Constructor, contextTypes) {
+      if (true) {
+        validateTypeDef(Constructor, contextTypes, 'context');
+      }
+      Constructor.contextTypes = _assign(
+        {},
+        Constructor.contextTypes,
+        contextTypes
+      );
+    },
+    /**
+     * Special case getDefaultProps which should move into statics but requires
+     * automatic merging.
+     */
+    getDefaultProps: function(Constructor, getDefaultProps) {
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps = createMergedResultFunction(
+          Constructor.getDefaultProps,
+          getDefaultProps
+        );
+      } else {
+        Constructor.getDefaultProps = getDefaultProps;
+      }
+    },
+    propTypes: function(Constructor, propTypes) {
+      if (true) {
+        validateTypeDef(Constructor, propTypes, 'prop');
+      }
+      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
+    },
+    statics: function(Constructor, statics) {
+      mixStaticSpecIntoComponent(Constructor, statics);
+    },
+    autobind: function() {}
+  };
+
+  function validateTypeDef(Constructor, typeDef, location) {
+    for (var propName in typeDef) {
+      if (typeDef.hasOwnProperty(propName)) {
+        // use a warning instead of an _invariant so components
+        // don't show up in prod but only in __DEV__
+        if (true) {
+          warning(
+            typeof typeDef[propName] === 'function',
+            '%s: %s type `%s` is invalid; it must be a function, usually from ' +
+              'React.PropTypes.',
+            Constructor.displayName || 'ReactClass',
+            ReactPropTypeLocationNames[location],
+            propName
+          );
+        }
+      }
+    }
+  }
+
+  function validateMethodOverride(isAlreadyDefined, name) {
+    var specPolicy = ReactClassInterface.hasOwnProperty(name)
+      ? ReactClassInterface[name]
+      : null;
+
+    // Disallow overriding of base class methods unless explicitly allowed.
+    if (ReactClassMixin.hasOwnProperty(name)) {
+      _invariant(
+        specPolicy === 'OVERRIDE_BASE',
+        'ReactClassInterface: You are attempting to override ' +
+          '`%s` from your class specification. Ensure that your method names ' +
+          'do not overlap with React methods.',
+        name
+      );
+    }
+
+    // Disallow defining methods more than once unless explicitly allowed.
+    if (isAlreadyDefined) {
+      _invariant(
+        specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED',
+        'ReactClassInterface: You are attempting to define ' +
+          '`%s` on your component more than once. This conflict may be due ' +
+          'to a mixin.',
+        name
+      );
+    }
+  }
+
+  /**
+   * Mixin helper which handles policy validation and reserved
+   * specification keys when building React classes.
+   */
+  function mixSpecIntoComponent(Constructor, spec) {
+    if (!spec) {
+      if (true) {
+        var typeofSpec = typeof spec;
+        var isMixinValid = typeofSpec === 'object' && spec !== null;
+
+        if (true) {
+          warning(
+            isMixinValid,
+            "%s: You're attempting to include a mixin that is either null " +
+              'or not an object. Check the mixins included by the component, ' +
+              'as well as any mixins they include themselves. ' +
+              'Expected object but got %s.',
+            Constructor.displayName || 'ReactClass',
+            spec === null ? null : typeofSpec
+          );
+        }
+      }
+
+      return;
+    }
+
+    _invariant(
+      typeof spec !== 'function',
+      "ReactClass: You're attempting to " +
+        'use a component class or function as a mixin. Instead, just use a ' +
+        'regular object.'
+    );
+    _invariant(
+      !isValidElement(spec),
+      "ReactClass: You're attempting to " +
+        'use a component as a mixin. Instead, just use a regular object.'
+    );
+
+    var proto = Constructor.prototype;
+    var autoBindPairs = proto.__reactAutoBindPairs;
+
+    // By handling mixins before any other properties, we ensure the same
+    // chaining order is applied to methods with DEFINE_MANY policy, whether
+    // mixins are listed before or after these methods in the spec.
+    if (spec.hasOwnProperty(MIXINS_KEY)) {
+      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+    }
+
+    for (var name in spec) {
+      if (!spec.hasOwnProperty(name)) {
+        continue;
+      }
+
+      if (name === MIXINS_KEY) {
+        // We have already handled mixins in a special case above.
+        continue;
+      }
+
+      var property = spec[name];
+      var isAlreadyDefined = proto.hasOwnProperty(name);
+      validateMethodOverride(isAlreadyDefined, name);
+
+      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+        RESERVED_SPEC_KEYS[name](Constructor, property);
+      } else {
+        // Setup methods on prototype:
+        // The following member methods should not be automatically bound:
+        // 1. Expected ReactClass methods (in the "interface").
+        // 2. Overridden methods (that were mixed in).
+        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+        var isFunction = typeof property === 'function';
+        var shouldAutoBind =
+          isFunction &&
+          !isReactClassMethod &&
+          !isAlreadyDefined &&
+          spec.autobind !== false;
+
+        if (shouldAutoBind) {
+          autoBindPairs.push(name, property);
+          proto[name] = property;
+        } else {
+          if (isAlreadyDefined) {
+            var specPolicy = ReactClassInterface[name];
+
+            // These cases should already be caught by validateMethodOverride.
+            _invariant(
+              isReactClassMethod &&
+                (specPolicy === 'DEFINE_MANY_MERGED' ||
+                  specPolicy === 'DEFINE_MANY'),
+              'ReactClass: Unexpected spec policy %s for key %s ' +
+                'when mixing in component specs.',
+              specPolicy,
+              name
+            );
+
+            // For methods which are defined more than once, call the existing
+            // methods before calling the new property, merging if appropriate.
+            if (specPolicy === 'DEFINE_MANY_MERGED') {
+              proto[name] = createMergedResultFunction(proto[name], property);
+            } else if (specPolicy === 'DEFINE_MANY') {
+              proto[name] = createChainedFunction(proto[name], property);
+            }
+          } else {
+            proto[name] = property;
+            if (true) {
+              // Add verbose displayName to the function, which helps when looking
+              // at profiling tools.
+              if (typeof property === 'function' && spec.displayName) {
+                proto[name].displayName = spec.displayName + '_' + name;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function mixStaticSpecIntoComponent(Constructor, statics) {
+    if (!statics) {
+      return;
+    }
+
+    for (var name in statics) {
+      var property = statics[name];
+      if (!statics.hasOwnProperty(name)) {
+        continue;
+      }
+
+      var isReserved = name in RESERVED_SPEC_KEYS;
+      _invariant(
+        !isReserved,
+        'ReactClass: You are attempting to define a reserved ' +
+          'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' +
+          'as an instance property instead; it will still be accessible on the ' +
+          'constructor.',
+        name
+      );
+
+      var isAlreadyDefined = name in Constructor;
+      if (isAlreadyDefined) {
+        var specPolicy = ReactClassStaticInterface.hasOwnProperty(name)
+          ? ReactClassStaticInterface[name]
+          : null;
+
+        _invariant(
+          specPolicy === 'DEFINE_MANY_MERGED',
+          'ReactClass: You are attempting to define ' +
+            '`%s` on your component more than once. This conflict may be ' +
+            'due to a mixin.',
+          name
+        );
+
+        Constructor[name] = createMergedResultFunction(Constructor[name], property);
+
+        return;
+      }
+
+      Constructor[name] = property;
+    }
+  }
+
+  /**
+   * Merge two objects, but throw if both contain the same key.
+   *
+   * @param {object} one The first object, which is mutated.
+   * @param {object} two The second object
+   * @return {object} one after it has been mutated to contain everything in two.
+   */
+  function mergeIntoWithNoDuplicateKeys(one, two) {
+    _invariant(
+      one && two && typeof one === 'object' && typeof two === 'object',
+      'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.'
+    );
+
+    for (var key in two) {
+      if (two.hasOwnProperty(key)) {
+        _invariant(
+          one[key] === undefined,
+          'mergeIntoWithNoDuplicateKeys(): ' +
+            'Tried to merge two objects with the same key: `%s`. This conflict ' +
+            'may be due to a mixin; in particular, this may be caused by two ' +
+            'getInitialState() or getDefaultProps() methods returning objects ' +
+            'with clashing keys.',
+          key
+        );
+        one[key] = two[key];
+      }
+    }
+    return one;
+  }
+
+  /**
+   * Creates a function that invokes two functions and merges their return values.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createMergedResultFunction(one, two) {
+    return function mergedResult() {
+      var a = one.apply(this, arguments);
+      var b = two.apply(this, arguments);
+      if (a == null) {
+        return b;
+      } else if (b == null) {
+        return a;
+      }
+      var c = {};
+      mergeIntoWithNoDuplicateKeys(c, a);
+      mergeIntoWithNoDuplicateKeys(c, b);
+      return c;
+    };
+  }
+
+  /**
+   * Creates a function that invokes two functions and ignores their return vales.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createChainedFunction(one, two) {
+    return function chainedFunction() {
+      one.apply(this, arguments);
+      two.apply(this, arguments);
+    };
+  }
+
+  /**
+   * Binds a method to the component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   * @param {function} method Method to be bound.
+   * @return {function} The bound method.
+   */
+  function bindAutoBindMethod(component, method) {
+    var boundMethod = method.bind(component);
+    if (true) {
+      boundMethod.__reactBoundContext = component;
+      boundMethod.__reactBoundMethod = method;
+      boundMethod.__reactBoundArguments = null;
+      var componentName = component.constructor.displayName;
+      var _bind = boundMethod.bind;
+      boundMethod.bind = function(newThis) {
+        for (
+          var _len = arguments.length,
+            args = Array(_len > 1 ? _len - 1 : 0),
+            _key = 1;
+          _key < _len;
+          _key++
+        ) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        // User is trying to bind() an autobound method; we effectively will
+        // ignore the value of "this" that the user is trying to use, so
+        // let's warn.
+        if (newThis !== component && newThis !== null) {
+          if (true) {
+            warning(
+              false,
+              'bind(): React component methods may only be bound to the ' +
+                'component instance. See %s',
+              componentName
+            );
+          }
+        } else if (!args.length) {
+          if (true) {
+            warning(
+              false,
+              'bind(): You are binding a component method to the component. ' +
+                'React does this for you automatically in a high-performance ' +
+                'way, so you can safely remove this call. See %s',
+              componentName
+            );
+          }
+          return boundMethod;
+        }
+        var reboundMethod = _bind.apply(boundMethod, arguments);
+        reboundMethod.__reactBoundContext = component;
+        reboundMethod.__reactBoundMethod = method;
+        reboundMethod.__reactBoundArguments = args;
+        return reboundMethod;
+      };
+    }
+    return boundMethod;
+  }
+
+  /**
+   * Binds all auto-bound methods in a component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   */
+  function bindAutoBindMethods(component) {
+    var pairs = component.__reactAutoBindPairs;
+    for (var i = 0; i < pairs.length; i += 2) {
+      var autoBindKey = pairs[i];
+      var method = pairs[i + 1];
+      component[autoBindKey] = bindAutoBindMethod(component, method);
+    }
+  }
+
+  var IsMountedPreMixin = {
+    componentDidMount: function() {
+      this.__isMounted = true;
+    }
+  };
+
+  var IsMountedPostMixin = {
+    componentWillUnmount: function() {
+      this.__isMounted = false;
+    }
+  };
+
+  /**
+   * Add more to the ReactClass base class. These are all legacy features and
+   * therefore not already part of the modern ReactComponent.
+   */
+  var ReactClassMixin = {
+    /**
+     * TODO: This will be deprecated because state should always keep a consistent
+     * type signature and the only use case for this, is to avoid that.
+     */
+    replaceState: function(newState, callback) {
+      this.updater.enqueueReplaceState(this, newState, callback);
+    },
+
+    /**
+     * Checks whether or not this composite component is mounted.
+     * @return {boolean} True if mounted, false otherwise.
+     * @protected
+     * @final
+     */
+    isMounted: function() {
+      if (true) {
+        warning(
+          this.__didWarnIsMounted,
+          '%s: isMounted is deprecated. Instead, make sure to clean up ' +
+            'subscriptions and pending requests in componentWillUnmount to ' +
+            'prevent memory leaks.',
+          (this.constructor && this.constructor.displayName) ||
+            this.name ||
+            'Component'
+        );
+        this.__didWarnIsMounted = true;
+      }
+      return !!this.__isMounted;
+    }
+  };
+
+  var ReactClassComponent = function() {};
+  _assign(
+    ReactClassComponent.prototype,
+    ReactComponent.prototype,
+    ReactClassMixin
+  );
+
+  /**
+   * Creates a composite component class given a class specification.
+   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+   *
+   * @param {object} spec Class specification (which must define `render`).
+   * @return {function} Component constructor function.
+   * @public
+   */
+  function createClass(spec) {
+    // To keep our warnings more understandable, we'll use a little hack here to
+    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+    // unnecessarily identify a class without displayName as 'Constructor'.
+    var Constructor = identity(function(props, context, updater) {
+      // This constructor gets overridden by mocks. The argument is used
+      // by mocks to assert on what gets mounted.
+
+      if (true) {
+        warning(
+          this instanceof Constructor,
+          'Something is calling a React component directly. Use a factory or ' +
+            'JSX instead. See: https://fb.me/react-legacyfactory'
+        );
+      }
+
+      // Wire up auto-binding
+      if (this.__reactAutoBindPairs.length) {
+        bindAutoBindMethods(this);
+      }
+
+      this.props = props;
+      this.context = context;
+      this.refs = emptyObject;
+      this.updater = updater || ReactNoopUpdateQueue;
+
+      this.state = null;
+
+      // ReactClasses doesn't have constructors. Instead, they use the
+      // getInitialState and componentWillMount methods for initialization.
+
+      var initialState = this.getInitialState ? this.getInitialState() : null;
+      if (true) {
+        // We allow auto-mocks to proceed as if they're returning null.
+        if (
+          initialState === undefined &&
+          this.getInitialState._isMockFunction
+        ) {
+          // This is probably bad practice. Consider warning here and
+          // deprecating this convenience.
+          initialState = null;
+        }
+      }
+      _invariant(
+        typeof initialState === 'object' && !Array.isArray(initialState),
+        '%s.getInitialState(): must return an object or null',
+        Constructor.displayName || 'ReactCompositeComponent'
+      );
+
+      this.state = initialState;
+    });
+    Constructor.prototype = new ReactClassComponent();
+    Constructor.prototype.constructor = Constructor;
+    Constructor.prototype.__reactAutoBindPairs = [];
+
+    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+    mixSpecIntoComponent(Constructor, IsMountedPreMixin);
+    mixSpecIntoComponent(Constructor, spec);
+    mixSpecIntoComponent(Constructor, IsMountedPostMixin);
+
+    // Initialize the defaultProps property after all mixins have been merged.
+    if (Constructor.getDefaultProps) {
+      Constructor.defaultProps = Constructor.getDefaultProps();
+    }
+
+    if (true) {
+      // This is a tag to indicate that the use of these method names is ok,
+      // since it's used with createClass. If it's not, then it's likely a
+      // mistake so we'll warn you to use the static property, property
+      // initializer or constructor respectively.
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps.isReactClassApproved = {};
+      }
+      if (Constructor.prototype.getInitialState) {
+        Constructor.prototype.getInitialState.isReactClassApproved = {};
+      }
+    }
+
+    _invariant(
+      Constructor.prototype.render,
+      'createClass(...): Class specification must implement a `render` method.'
+    );
+
+    if (true) {
+      warning(
+        !Constructor.prototype.componentShouldUpdate,
+        '%s has a method called ' +
+          'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' +
+          'The name is phrased as a question because the function is ' +
+          'expected to return a value.',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.componentWillRecieveProps,
+        '%s has a method called ' +
+          'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+      warning(
+        !Constructor.prototype.UNSAFE_componentWillRecieveProps,
+        '%s has a method called UNSAFE_componentWillRecieveProps(). ' +
+          'Did you mean UNSAFE_componentWillReceiveProps()?',
+        spec.displayName || 'A component'
+      );
+    }
+
+    // Reduce time spent doing lookups by setting these on the prototype.
+    for (var methodName in ReactClassInterface) {
+      if (!Constructor.prototype[methodName]) {
+        Constructor.prototype[methodName] = null;
+      }
+    }
+
+    return Constructor;
+  }
+
+  return createClass;
+}
+
+module.exports = factory;
+
+
+/***/ }),
+
+/***/ "./node_modules/create-react-class/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/create-react-class/index.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var factory = __webpack_require__(/*! ./factory */ "./node_modules/create-react-class/factory.js");
+
+if (typeof React === 'undefined') {
+  throw Error(
+    'create-react-class could not find the React object. If you are using script tags, ' +
+      'make sure that React is being loaded before create-react-class.'
+  );
+}
+
+// Hack to grab NoopUpdateQueue from isomorphic React
+var ReactNoopUpdateQueue = new React.Component().updater;
+
+module.exports = factory(
+  React.Component,
+  React.isValidElement,
+  ReactNoopUpdateQueue
+);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/lib/loader.js?!./resources/js/components/styles.scss":
 /*!**********************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/lib/loader.js??ref--7-3!./resources/js/components/styles.scss ***!
@@ -4148,6 +5124,98 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
+
+/***/ }),
+
+/***/ "./node_modules/fbjs/lib/emptyObject.js":
+/*!**********************************************!*\
+  !*** ./node_modules/fbjs/lib/emptyObject.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+var emptyObject = {};
+
+if (true) {
+  Object.freeze(emptyObject);
+}
+
+module.exports = emptyObject;
+
+/***/ }),
+
+/***/ "./node_modules/fbjs/lib/invariant.js":
+/*!********************************************!*\
+  !*** ./node_modules/fbjs/lib/invariant.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var validateFormat = function validateFormat(format) {};
+
+if (true) {
+  validateFormat = function validateFormat(format) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  };
+}
+
+function invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+module.exports = invariant;
 
 /***/ }),
 
@@ -39049,6 +40117,1062 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/react-notification-system/dist/NotificationContainer.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/NotificationContainer.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var createReactClass = __webpack_require__(/*! create-react-class */ "./node_modules/create-react-class/index.js");
+var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+var NotificationItem = __webpack_require__(/*! ./NotificationItem */ "./node_modules/react-notification-system/dist/NotificationItem.js");
+var Constants = __webpack_require__(/*! ./constants */ "./node_modules/react-notification-system/dist/constants.js");
+
+var NotificationContainer = createReactClass({
+
+  propTypes: {
+    position: PropTypes.string.isRequired,
+    notifications: PropTypes.array.isRequired,
+    getStyles: PropTypes.object
+  },
+
+  _style: {},
+
+  componentWillMount: function() {
+    // Fix position if width is overrided
+    this._style = this.props.getStyles.container(this.props.position);
+
+    if (this.props.getStyles.overrideWidth && (this.props.position === Constants.positions.tc || this.props.position === Constants.positions.bc)) {
+      this._style.marginLeft = -(this.props.getStyles.overrideWidth / 2);
+    }
+  },
+
+  render: function() {
+    var self = this;
+    var notifications;
+
+    if ([Constants.positions.bl, Constants.positions.br, Constants.positions.bc].indexOf(this.props.position) > -1) {
+      this.props.notifications.reverse();
+    }
+
+    notifications = this.props.notifications.map(function(notification) {
+      return (
+        React.createElement(NotificationItem, {
+          ref:  'notification-' + notification.uid, 
+          key:  notification.uid, 
+          notification:  notification, 
+          getStyles:  self.props.getStyles, 
+          onRemove:  self.props.onRemove, 
+          noAnimation:  self.props.noAnimation, 
+          allowHTML:  self.props.allowHTML, 
+          children:  self.props.children}
+        )
+      );
+    });
+
+    return (
+      React.createElement("div", {className:  'notifications-' + this.props.position, style:  this._style}, 
+         notifications 
+      )
+    );
+  }
+});
+
+
+module.exports = NotificationContainer;
+
+
+/***/ }),
+
+/***/ "./node_modules/react-notification-system/dist/NotificationItem.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/NotificationItem.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var createReactClass = __webpack_require__(/*! create-react-class */ "./node_modules/create-react-class/index.js");
+var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var Constants = __webpack_require__(/*! ./constants */ "./node_modules/react-notification-system/dist/constants.js");
+var Helpers = __webpack_require__(/*! ./helpers */ "./node_modules/react-notification-system/dist/helpers.js");
+var merge = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+
+/* From Modernizr */
+var whichTransitionEvent = function() {
+  var el = document.createElement('fakeelement');
+  var transition;
+  var transitions = {
+    transition: 'transitionend',
+    OTransition: 'oTransitionEnd',
+    MozTransition: 'transitionend',
+    WebkitTransition: 'webkitTransitionEnd'
+  };
+
+  Object.keys(transitions).forEach(function(transitionKey) {
+    if (el.style[transitionKey] !== undefined) {
+      transition = transitions[transitionKey];
+    }
+  });
+
+  return transition;
+};
+
+var NotificationItem = createReactClass({
+  propTypes: {
+    notification: PropTypes.object,
+    getStyles: PropTypes.object,
+    onRemove: PropTypes.func,
+    allowHTML: PropTypes.bool,
+    noAnimation: PropTypes.bool,
+    children: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element
+    ])
+  },
+
+  getDefaultProps: function() {
+    return {
+      noAnimation: false,
+      onRemove: function() {},
+      allowHTML: false
+    };
+  },
+
+  getInitialState: function() {
+    return {
+      visible: undefined,
+      removed: false
+    };
+  },
+
+  componentWillMount: function() {
+    var getStyles = this.props.getStyles;
+    var level = this.props.notification.level;
+    var dismissible = this.props.notification.dismissible;
+
+    this._noAnimation = this.props.noAnimation;
+
+    this._styles = {
+      notification: getStyles.byElement('notification')(level),
+      title: getStyles.byElement('title')(level),
+      dismiss: getStyles.byElement('dismiss')(level),
+      messageWrapper: getStyles.byElement('messageWrapper')(level),
+      actionWrapper: getStyles.byElement('actionWrapper')(level),
+      action: getStyles.byElement('action')(level)
+    };
+
+    if (!dismissible || dismissible === 'none' || dismissible === 'button') {
+      this._styles.notification.cursor = 'default';
+    }
+  },
+
+  _styles: {},
+
+  _notificationTimer: null,
+
+  _height: 0,
+
+  _noAnimation: null,
+
+  _isMounted: false,
+
+  _removeCount: 0,
+
+  _getCssPropertyByPosition: function() {
+    var position = this.props.notification.position;
+    var css = {};
+
+    switch (position) {
+    case Constants.positions.tl:
+    case Constants.positions.bl:
+      css = {
+        property: 'left',
+        value: -200
+      };
+      break;
+
+    case Constants.positions.tr:
+    case Constants.positions.br:
+      css = {
+        property: 'right',
+        value: -200
+      };
+      break;
+
+    case Constants.positions.tc:
+      css = {
+        property: 'top',
+        value: -100
+      };
+      break;
+
+    case Constants.positions.bc:
+      css = {
+        property: 'bottom',
+        value: -100
+      };
+      break;
+
+    default:
+    }
+
+    return css;
+  },
+
+  _defaultAction: function(event) {
+    var notification = this.props.notification;
+
+    event.preventDefault();
+    this._hideNotification();
+    if (typeof notification.action.callback === 'function') {
+      notification.action.callback();
+    }
+  },
+
+  _hideNotification: function() {
+    if (this._notificationTimer) {
+      this._notificationTimer.clear();
+    }
+
+    if (this._isMounted) {
+      this.setState({
+        visible: false,
+        removed: true
+      });
+    }
+
+    if (this._noAnimation) {
+      this._removeNotification();
+    }
+  },
+
+  _removeNotification: function() {
+    this.props.onRemove(this.props.notification.uid);
+  },
+
+  _dismiss: function() {
+    if (!this.props.notification.dismissible) {
+      return;
+    }
+
+    this._hideNotification();
+  },
+
+  _showNotification: function() {
+    var self = this;
+    setTimeout(function() {
+      if (self._isMounted) {
+        self.setState({
+          visible: true
+        });
+      }
+    }, 50);
+  },
+
+  _onTransitionEnd: function() {
+    if (this._removeCount > 0) return;
+    if (this.state.removed) {
+      this._removeCount += 1;
+      this._removeNotification();
+    }
+  },
+
+  componentDidMount: function() {
+    var self = this;
+    var transitionEvent = whichTransitionEvent();
+    var notification = this.props.notification;
+    var element = ReactDOM.findDOMNode(this);
+
+    this._height = element.offsetHeight;
+
+    this._isMounted = true;
+
+    // Watch for transition end
+    if (!this._noAnimation) {
+      if (transitionEvent) {
+        element.addEventListener(transitionEvent, this._onTransitionEnd);
+      } else {
+        this._noAnimation = true;
+      }
+    }
+
+
+    if (notification.autoDismiss) {
+      this._notificationTimer = new Helpers.Timer(function() {
+        self._hideNotification();
+      }, notification.autoDismiss * 1000);
+    }
+
+    this._showNotification();
+  },
+
+  _handleMouseEnter: function() {
+    var notification = this.props.notification;
+    if (notification.autoDismiss) {
+      this._notificationTimer.pause();
+    }
+  },
+
+  _handleMouseLeave: function() {
+    var notification = this.props.notification;
+    if (notification.autoDismiss) {
+      this._notificationTimer.resume();
+    }
+  },
+
+  _handleNotificationClick: function() {
+    var dismissible = this.props.notification.dismissible;
+    if (dismissible === 'both' || dismissible === 'click' || dismissible === true) {
+      this._dismiss();
+    }
+  },
+
+  componentWillUnmount: function() {
+    var element = ReactDOM.findDOMNode(this);
+    var transitionEvent = whichTransitionEvent();
+    element.removeEventListener(transitionEvent, this._onTransitionEnd);
+    this._isMounted = false;
+  },
+
+  _allowHTML: function(string) {
+    return { __html: string };
+  },
+
+  render: function() {
+    var notification = this.props.notification;
+    var className = 'notification notification-' + notification.level;
+    var notificationStyle = merge({}, this._styles.notification);
+    var cssByPos = this._getCssPropertyByPosition();
+    var dismiss = null;
+    var actionButton = null;
+    var title = null;
+    var message = null;
+
+    if (this.state.visible) {
+      className += ' notification-visible';
+    } else if (this.state.visible === false) {
+      className += ' notification-hidden';
+    }
+
+    if (notification.dismissible === 'none') {
+      className += ' notification-not-dismissible';
+    }
+
+    if (this.props.getStyles.overrideStyle) {
+      if (!this.state.visible && !this.state.removed) {
+        notificationStyle[cssByPos.property] = cssByPos.value;
+      }
+
+      if (this.state.visible && !this.state.removed) {
+        notificationStyle.height = this._height;
+        notificationStyle[cssByPos.property] = 0;
+      }
+
+      if (this.state.removed) {
+        notificationStyle.overlay = 'hidden';
+        notificationStyle.height = 0;
+        notificationStyle.marginTop = 0;
+        notificationStyle.paddingTop = 0;
+        notificationStyle.paddingBottom = 0;
+      }
+      notificationStyle.opacity = this.state.visible ? this._styles.notification.isVisible.opacity : this._styles.notification.isHidden.opacity;
+    }
+
+    if (notification.title) {
+      title = React.createElement("h4", {className: "notification-title", style:  this._styles.title},  notification.title);
+    }
+
+    if (notification.message) {
+      if (this.props.allowHTML) {
+        message = (
+          React.createElement("div", {className: "notification-message", style:  this._styles.messageWrapper, dangerouslySetInnerHTML:  this._allowHTML(notification.message) })
+        );
+      } else {
+        message = (
+          React.createElement("div", {className: "notification-message", style:  this._styles.messageWrapper},  notification.message)
+        );
+      }
+    }
+    if (notification.dismissible === 'both' || notification.dismissible === 'button' || notification.dismissible === true) {
+      dismiss = React.createElement("span", {className: "notification-dismiss", onClick:  this._dismiss, style:  this._styles.dismiss}, "×");
+    }
+
+    if (notification.action) {
+      actionButton = (
+        React.createElement("div", {className: "notification-action-wrapper", style:  this._styles.actionWrapper}, 
+          React.createElement("button", {className: "notification-action-button", 
+            onClick:  this._defaultAction, 
+            style:  this._styles.action}, 
+             notification.action.label
+          )
+        )
+      );
+    }
+
+    if (notification.children) {
+      actionButton = notification.children;
+    }
+
+    return (
+      React.createElement("div", {className:  className, onClick:  this._handleNotificationClick, onMouseEnter:  this._handleMouseEnter, onMouseLeave:  this._handleMouseLeave, style:  notificationStyle }, 
+         title, 
+         message, 
+         dismiss, 
+         actionButton 
+      )
+    );
+  }
+
+});
+
+module.exports = NotificationItem;
+
+
+/***/ }),
+
+/***/ "./node_modules/react-notification-system/dist/NotificationSystem.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/NotificationSystem.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var createReactClass = __webpack_require__(/*! create-react-class */ "./node_modules/create-react-class/index.js");
+var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+var merge = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+var NotificationContainer = __webpack_require__(/*! ./NotificationContainer */ "./node_modules/react-notification-system/dist/NotificationContainer.js");
+var Constants = __webpack_require__(/*! ./constants */ "./node_modules/react-notification-system/dist/constants.js");
+var Styles = __webpack_require__(/*! ./styles */ "./node_modules/react-notification-system/dist/styles.js");
+
+var NotificationSystem = createReactClass({
+
+  uid: 3400,
+
+  _isMounted: false,
+
+  _getStyles: {
+    overrideStyle: {},
+
+    overrideWidth: null,
+
+    setOverrideStyle: function(style) {
+      this.overrideStyle = style;
+    },
+
+    wrapper: function() {
+      if (!this.overrideStyle) return {};
+      return merge({}, Styles.Wrapper, this.overrideStyle.Wrapper);
+    },
+
+    container: function(position) {
+      var override = this.overrideStyle.Containers || {};
+      if (!this.overrideStyle) return {};
+
+      this.overrideWidth = Styles.Containers.DefaultStyle.width;
+
+      if (override.DefaultStyle && override.DefaultStyle.width) {
+        this.overrideWidth = override.DefaultStyle.width;
+      }
+
+      if (override[position] && override[position].width) {
+        this.overrideWidth = override[position].width;
+      }
+
+      return merge({}, Styles.Containers.DefaultStyle, Styles.Containers[position], override.DefaultStyle, override[position]);
+    },
+
+    elements: {
+      notification: 'NotificationItem',
+      title: 'Title',
+      messageWrapper: 'MessageWrapper',
+      dismiss: 'Dismiss',
+      action: 'Action',
+      actionWrapper: 'ActionWrapper'
+    },
+
+    byElement: function(element) {
+      var self = this;
+      return function(level) {
+        var _element = self.elements[element];
+        var override = self.overrideStyle[_element] || {};
+        if (!self.overrideStyle) return {};
+        return merge({}, Styles[_element].DefaultStyle, Styles[_element][level], override.DefaultStyle, override[level]);
+      };
+    }
+  },
+
+  _didNotificationRemoved: function(uid) {
+    var notification;
+    var notifications = this.state.notifications.filter(function(toCheck) {
+      if (toCheck.uid === uid) {
+        notification = toCheck;
+        return false;
+      }
+      return true;
+    });
+
+    if (this._isMounted) {
+      this.setState({ notifications: notifications });
+    }
+
+    if (notification && notification.onRemove) {
+      notification.onRemove(notification);
+    }
+  },
+
+  getInitialState: function() {
+    return {
+      notifications: []
+    };
+  },
+
+  propTypes: {
+    style: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.object
+    ]),
+    noAnimation: PropTypes.bool,
+    allowHTML: PropTypes.bool
+  },
+
+  getDefaultProps: function() {
+    return {
+      style: {},
+      noAnimation: false,
+      allowHTML: false
+    };
+  },
+
+  addNotification: function(notification) {
+    var _notification = merge({}, Constants.notification, notification);
+    var notifications = this.state.notifications;
+    var i;
+
+    if (!_notification.level) {
+      throw new Error('notification level is required.');
+    }
+
+    if (Object.keys(Constants.levels).indexOf(_notification.level) === -1) {
+      throw new Error('\'' + _notification.level + '\' is not a valid level.');
+    }
+
+    // eslint-disable-next-line
+    if (isNaN(_notification.autoDismiss)) {
+      throw new Error('\'autoDismiss\' must be a number.');
+    }
+
+    if (Object.keys(Constants.positions).indexOf(_notification.position) === -1) {
+      throw new Error('\'' + _notification.position + '\' is not a valid position.');
+    }
+
+    // Some preparations
+    _notification.position = _notification.position.toLowerCase();
+    _notification.level = _notification.level.toLowerCase();
+    _notification.autoDismiss = parseInt(_notification.autoDismiss, 10);
+
+    _notification.uid = _notification.uid || this.uid;
+    _notification.ref = 'notification-' + _notification.uid;
+    this.uid += 1;
+
+    // do not add if the notification already exists based on supplied uid
+    for (i = 0; i < notifications.length; i += 1) {
+      if (notifications[i].uid === _notification.uid) {
+        return false;
+      }
+    }
+
+    notifications.push(_notification);
+
+    if (typeof _notification.onAdd === 'function') {
+      notification.onAdd(_notification);
+    }
+
+    this.setState({
+      notifications: notifications
+    });
+
+    return _notification;
+  },
+
+  getNotificationRef: function(notification) {
+    var self = this;
+    var foundNotification = null;
+
+    Object.keys(this.refs).forEach(function(container) {
+      if (container.indexOf('container') > -1) {
+        Object.keys(self.refs[container].refs).forEach(function(_notification) {
+          var uid = notification.uid ? notification.uid : notification;
+          if (_notification === 'notification-' + uid) {
+            // NOTE: Stop iterating further and return the found notification.
+            // Since UIDs are uniques and there won't be another notification found.
+            foundNotification = self.refs[container].refs[_notification];
+          }
+        });
+      }
+    });
+
+    return foundNotification;
+  },
+
+  removeNotification: function(notification) {
+    var foundNotification = this.getNotificationRef(notification);
+    return foundNotification && foundNotification._hideNotification();
+  },
+
+  editNotification: function(notification, newNotification) {
+    var foundNotification = null;
+    // NOTE: Find state notification to update by using
+    // `setState` and forcing React to re-render the component.
+    var uid = notification.uid ? notification.uid : notification;
+
+    var newNotifications = this.state.notifications.filter(function(stateNotification) {
+      if (uid === stateNotification.uid) {
+        foundNotification = stateNotification;
+        return false;
+      }
+
+      return true;
+    });
+
+
+    if (!foundNotification) {
+      return;
+    }
+
+    newNotifications.push(merge(
+      {},
+      foundNotification,
+      newNotification
+    ));
+
+    this.setState({
+      notifications: newNotifications
+    });
+  },
+
+  clearNotifications: function() {
+    var self = this;
+    Object.keys(this.refs).forEach(function(container) {
+      if (container.indexOf('container') > -1) {
+        Object.keys(self.refs[container].refs).forEach(function(_notification) {
+          self.refs[container].refs[_notification]._hideNotification();
+        });
+      }
+    });
+  },
+
+  componentDidMount: function() {
+    this._getStyles.setOverrideStyle(this.props.style);
+    this._isMounted = true;
+  },
+
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
+
+  render: function() {
+    var self = this;
+    var containers = null;
+    var notifications = this.state.notifications;
+
+    if (notifications.length) {
+      containers = Object.keys(Constants.positions).map(function(position) {
+        var _notifications = notifications.filter(function(notification) {
+          return position === notification.position;
+        });
+
+        if (!_notifications.length) {
+          return null;
+        }
+
+        return (
+          React.createElement(NotificationContainer, {
+            ref:  'container-' + position, 
+            key:  position, 
+            position:  position, 
+            notifications:  _notifications, 
+            getStyles:  self._getStyles, 
+            onRemove:  self._didNotificationRemoved, 
+            noAnimation:  self.props.noAnimation, 
+            allowHTML:  self.props.allowHTML}
+          )
+        );
+      });
+    }
+
+
+    return (
+      React.createElement("div", {className: "notifications-wrapper", style:  this._getStyles.wrapper() }, 
+         containers 
+      )
+    );
+  }
+});
+
+module.exports = NotificationSystem;
+
+
+/***/ }),
+
+/***/ "./node_modules/react-notification-system/dist/constants.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/constants.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var CONSTANTS = {
+
+  // Positions
+  positions: {
+    tl: 'tl',
+    tr: 'tr',
+    tc: 'tc',
+    bl: 'bl',
+    br: 'br',
+    bc: 'bc'
+  },
+
+  // Levels
+  levels: {
+    success: 'success',
+    error: 'error',
+    warning: 'warning',
+    info: 'info'
+  },
+
+  // Notification defaults
+  notification: {
+    title: null,
+    message: null,
+    level: null,
+    position: 'tr',
+    autoDismiss: 5,
+    dismissible: 'both',
+    action: null
+  }
+};
+
+
+module.exports = CONSTANTS;
+
+
+/***/ }),
+
+/***/ "./node_modules/react-notification-system/dist/helpers.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/helpers.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var Helpers = {
+  Timer: function(callback, delay) {
+    var timerId;
+    var start;
+    var remaining = delay;
+
+    this.pause = function() {
+      clearTimeout(timerId);
+      remaining -= new Date() - start;
+    };
+
+    this.resume = function() {
+      start = new Date();
+      clearTimeout(timerId);
+      timerId = setTimeout(callback, remaining);
+    };
+
+    this.clear = function() {
+      clearTimeout(timerId);
+    };
+
+    this.resume();
+  }
+};
+
+module.exports = Helpers;
+
+
+/***/ }),
+
+/***/ "./node_modules/react-notification-system/dist/styles.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/react-notification-system/dist/styles.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// Used for calculations
+var defaultWidth = 320;
+var defaultColors = {
+  success: {
+    rgb: '94, 164, 0',
+    hex: '#5ea400'
+  },
+  error: {
+    rgb: '236, 61, 61',
+    hex: '#ec3d3d'
+  },
+  warning: {
+    rgb: '235, 173, 23',
+    hex: '#ebad1a'
+  },
+  info: {
+    rgb: '54, 156, 199',
+    hex: '#369cc7'
+  }
+};
+var defaultShadowOpacity = '0.9';
+
+var STYLES = {
+
+  Wrapper: {},
+  Containers: {
+    DefaultStyle: {
+      fontFamily: 'inherit',
+      position: 'fixed',
+      width: defaultWidth,
+      padding: '0 10px 10px 10px',
+      zIndex: 9998,
+      WebkitBoxSizing: 'border-box',
+      MozBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      height: 'auto'
+    },
+
+    tl: {
+      top: '0px',
+      bottom: 'auto',
+      left: '0px',
+      right: 'auto'
+    },
+
+    tr: {
+      top: '0px',
+      bottom: 'auto',
+      left: 'auto',
+      right: '0px'
+    },
+
+    tc: {
+      top: '0px',
+      bottom: 'auto',
+      margin: '0 auto',
+      left: '50%',
+      marginLeft: -(defaultWidth / 2)
+    },
+
+    bl: {
+      top: 'auto',
+      bottom: '0px',
+      left: '0px',
+      right: 'auto'
+    },
+
+    br: {
+      top: 'auto',
+      bottom: '0px',
+      left: 'auto',
+      right: '0px'
+    },
+
+    bc: {
+      top: 'auto',
+      bottom: '0px',
+      margin: '0 auto',
+      left: '50%',
+      marginLeft: -(defaultWidth / 2)
+    }
+
+  },
+
+  NotificationItem: {
+    DefaultStyle: {
+      position: 'relative',
+      width: '100%',
+      cursor: 'pointer',
+      borderRadius: '2px',
+      fontSize: '13px',
+      margin: '10px 0 0',
+      padding: '10px',
+      display: 'block',
+      WebkitBoxSizing: 'border-box',
+      MozBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      opacity: 0,
+      transition: '0.3s ease-in-out',
+      WebkitTransform: 'translate3d(0, 0, 0)',
+      transform: 'translate3d(0, 0, 0)',
+      willChange: 'transform, opacity',
+
+      isHidden: {
+        opacity: 0
+      },
+
+      isVisible: {
+        opacity: 1
+      }
+    },
+
+    success: {
+      borderTop: '2px solid ' + defaultColors.success.hex,
+      backgroundColor: '#f0f5ea',
+      color: '#4b583a',
+      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')',
+      MozBoxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')',
+      boxShadow: '0 0 1px rgba(' + defaultColors.success.rgb + ',' + defaultShadowOpacity + ')'
+    },
+
+    error: {
+      borderTop: '2px solid ' + defaultColors.error.hex,
+      backgroundColor: '#f4e9e9',
+      color: '#412f2f',
+      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.error.rgb + ',' + defaultShadowOpacity + ')',
+      MozBoxShadow: '0 0 1px rgba(' + defaultColors.error.rgb + ',' + defaultShadowOpacity + ')',
+      boxShadow: '0 0 1px rgba(' + defaultColors.error.rgb + ',' + defaultShadowOpacity + ')'
+    },
+
+    warning: {
+      borderTop: '2px solid ' + defaultColors.warning.hex,
+      backgroundColor: '#f9f6f0',
+      color: '#5a5343',
+      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')',
+      MozBoxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')',
+      boxShadow: '0 0 1px rgba(' + defaultColors.warning.rgb + ',' + defaultShadowOpacity + ')'
+    },
+
+    info: {
+      borderTop: '2px solid ' + defaultColors.info.hex,
+      backgroundColor: '#e8f0f4',
+      color: '#41555d',
+      WebkitBoxShadow: '0 0 1px rgba(' + defaultColors.info.rgb + ',' + defaultShadowOpacity + ')',
+      MozBoxShadow: '0 0 1px rgba(' + defaultColors.info.rgb + ',' + defaultShadowOpacity + ')',
+      boxShadow: '0 0 1px rgba(' + defaultColors.info.rgb + ',' + defaultShadowOpacity + ')'
+    }
+  },
+
+  Title: {
+    DefaultStyle: {
+      fontSize: '14px',
+      margin: '0 0 5px 0',
+      padding: 0,
+      fontWeight: 'bold'
+    },
+
+    success: {
+      color: defaultColors.success.hex
+    },
+
+    error: {
+      color: defaultColors.error.hex
+    },
+
+    warning: {
+      color: defaultColors.warning.hex
+    },
+
+    info: {
+      color: defaultColors.info.hex
+    }
+
+  },
+
+  MessageWrapper: {
+    DefaultStyle: {
+      margin: 0,
+      padding: 0
+    }
+  },
+
+  Dismiss: {
+    DefaultStyle: {
+      cursor: 'pointer',
+      fontFamily: 'Arial',
+      fontSize: '17px',
+      position: 'absolute',
+      top: '4px',
+      right: '5px',
+      lineHeight: '15px',
+      backgroundColor: '#dededf',
+      color: '#ffffff',
+      borderRadius: '50%',
+      width: '14px',
+      height: '14px',
+      fontWeight: 'bold',
+      textAlign: 'center'
+    },
+
+    success: {
+      color: '#f0f5ea',
+      backgroundColor: '#b0ca92'
+    },
+
+    error: {
+      color: '#f4e9e9',
+      backgroundColor: '#e4bebe'
+    },
+
+    warning: {
+      color: '#f9f6f0',
+      backgroundColor: '#e1cfac'
+    },
+
+    info: {
+      color: '#e8f0f4',
+      backgroundColor: '#a4becb'
+    }
+  },
+
+  Action: {
+    DefaultStyle: {
+      background: '#ffffff',
+      borderRadius: '2px',
+      padding: '6px 20px',
+      fontWeight: 'bold',
+      margin: '10px 0 0 0',
+      border: 0
+    },
+
+    success: {
+      backgroundColor: defaultColors.success.hex,
+      color: '#ffffff'
+    },
+
+    error: {
+      backgroundColor: defaultColors.error.hex,
+      color: '#ffffff'
+    },
+
+    warning: {
+      backgroundColor: defaultColors.warning.hex,
+      color: '#ffffff'
+    },
+
+    info: {
+      backgroundColor: defaultColors.info.hex,
+      color: '#ffffff'
+    }
+  },
+
+  ActionWrapper: {
+    DefaultStyle: {
+      margin: 0,
+      padding: 0
+    }
+  }
+};
+
+module.exports = STYLES;
+
+
+/***/ }),
+
 /***/ "./node_modules/react-overlays/Dropdown.js":
 /*!*************************************************!*\
   !*** ./node_modules/react-overlays/Dropdown.js ***!
@@ -48282,11 +50406,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./styles.scss */ "./resources/js/components/styles.scss");
-/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-notification-system */ "./node_modules/react-notification-system/dist/NotificationSystem.js");
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_notification_system__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles.scss */ "./resources/js/components/styles.scss");
+/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48297,13 +50423,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -48323,6 +50450,8 @@ function (_Component) {
     _classCallCheck(this, Auth);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Auth).call(this, props));
+    _this.notificationSystem = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.addNotification = _this.addNotification.bind(_assertThisInitialized(_this));
     _this.state = {
       email: "",
       password: ""
@@ -48331,18 +50460,29 @@ function (_Component) {
   }
 
   _createClass(Auth, [{
+    key: "addNotification",
+    value: function addNotification() {
+      var notification = this.notificationSystem.current;
+      notification.addNotification({
+        position: "tc",
+        title: "ログインエラー",
+        message: "メールアドレスかパスワードが間違っています",
+        level: "error"
+      });
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       var _this2 = this;
 
       e.preventDefault();
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/login", {
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/login", {
         email: this.state.email,
         password: this.state.password
       }).then(function (res) {
         var token = res.data.access_token;
-        axios__WEBPACK_IMPORTED_MODULE_5___default.a.defaults.headers.common["Authorization"] = "Bearer " + token;
-        axios__WEBPACK_IMPORTED_MODULE_5___default.a.get("/api/me").then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.defaults.headers.common["Authorization"] = "Bearer " + token;
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.get("/api/me").then(function (res) {
           _this2.props.handleGetState(res.data);
         }).catch(function (err) {
           console.log(err);
@@ -48353,6 +50493,8 @@ function (_Component) {
         });
       }).catch(function (err) {
         console.log(err);
+
+        _this2.addNotification();
       });
     }
   }, {
@@ -48360,8 +50502,8 @@ function (_Component) {
     value: function handleLogout() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/logout").then(function (res) {
-        axios__WEBPACK_IMPORTED_MODULE_5___default.a.defaults.headers.common["Authorization"] = "";
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/logout").then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.defaults.headers.common["Authorization"] = "";
 
         _this3.setState({
           login: false
@@ -48432,7 +50574,9 @@ function (_Component) {
         variant: "primary",
         type: "submit",
         className: "w-100 mt-2"
-      }, "\u30ED\u30B0\u30A4\u30F3")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30C6\u30B9\u30C8\u30A2\u30AB\u30A6\u30F3\u30C8\u3054\u7528\u610F\u3054\u3056\u3044\u307E\u3059"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "email | admin@test.com"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "password | testtest"))))));
+      }, "\u30ED\u30B0\u30A4\u30F3")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "\u30C6\u30B9\u30C8\u30A2\u30AB\u30A6\u30F3\u30C8\u3054\u7528\u610F\u3054\u3056\u3044\u307E\u3059"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "email | admin@test.com"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "password | testtest"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_notification_system__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        ref: this.notificationSystem
+      }));
     }
   }]);
 
@@ -49431,8 +51575,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-notification-system */ "./node_modules/react-notification-system/dist/NotificationSystem.js");
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_notification_system__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -49449,13 +51595,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -49474,6 +51621,8 @@ function (_Component) {
     _classCallCheck(this, SaleForm);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SaleForm).call(this));
+    _this.notificationSystem = react__WEBPACK_IMPORTED_MODULE_1___default.a.createRef();
+    _this.addNotification = _this.addNotification.bind(_assertThisInitialized(_this));
     _this.state = {
       redirect: false,
       validated: false,
@@ -49541,12 +51690,14 @@ function (_Component) {
                 return this.changeState();
 
               case 6:
-                axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/sale", this.state).then(function () {
+                axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/sale", this.state).then(function () {
                   return _this2.setState({
                     redirect: true
                   });
                 }).catch(function (err) {
                   console.log(err);
+
+                  _this2.addNotification(1);
                 });
 
               case 7:
@@ -49729,6 +51880,22 @@ function (_Component) {
     value: function handleOnInput(e, n) {
       if (e.target.value.length > n) {
         e.target.value = e.target.value.slice(0, n);
+      }
+    }
+  }, {
+    key: "addNotification",
+    value: function addNotification(num) {
+      var notification = this.notificationSystem.current;
+
+      switch (num) {
+        case 1:
+          notification.addNotification({
+            position: "tc",
+            title: "保存エラー",
+            message: "データーベースに保存できませんでした(日付を確認してください)",
+            level: "error"
+          });
+          return;
       }
     }
   }, {
@@ -50007,7 +52174,9 @@ function (_Component) {
       }))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
         type: "submit",
         className: "btn btn-primary w-100 mt-2"
-      }, "\u65E5\u5831\u9001\u4FE1")));
+      }, "\u65E5\u5831\u9001\u4FE1")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_notification_system__WEBPACK_IMPORTED_MODULE_5___default.a, {
+        ref: this.notificationSystem
+      }));
     }
   }]);
 

@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Form, Col, Button } from "react-bootstrap";
 import { Link, Route, Redirect } from "react-router-dom";
+import NotificationSystem from "react-notification-system";
 import axios from "axios";
 
 class EditForm extends Component {
     constructor(props) {
         super(props);
+        this.notificationSystem = React.createRef();
+        this.addNotification = this.addNotification.bind(this);
         this.state = {
             validated: false,
             sales: {
@@ -63,6 +66,7 @@ class EditForm extends Component {
             })
             .catch(err => {
                 console.log(err);
+                this.addNotification(1);
             });
     }
 
@@ -151,6 +155,20 @@ class EditForm extends Component {
                 this.setState({ expenses: { personal: e.target.value } });
                 return;
             default:
+                return;
+        }
+    }
+
+    addNotification(num) {
+        const notification = this.notificationSystem.current;
+        switch (num) {
+            case 1:
+                notification.addNotification({
+                    position: "tc",
+                    title: "保存エラー",
+                    message: "データーベースに保存できませんでした",
+                    level: "error"
+                });
                 return;
         }
     }
@@ -522,6 +540,7 @@ class EditForm extends Component {
                         編集する
                     </Button>
                 </Form>
+                <NotificationSystem ref={this.notificationSystem} />
             </div>
         );
     }

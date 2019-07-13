@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Form, Col, Button, Container, Modal } from "react-bootstrap";
+import NotificationSystem from "react-notification-system";
 import styles from "./styles.scss";
 
 import { Router, Link } from "react-router-dom";
@@ -9,10 +10,22 @@ import Axios from "axios";
 class Auth extends Component {
     constructor(props) {
         super(props);
+        this.notificationSystem = React.createRef();
+        this.addNotification = this.addNotification.bind(this);
         this.state = {
             email: "",
             password: ""
         };
+    }
+
+    addNotification() {
+        const notification = this.notificationSystem.current;
+        notification.addNotification({
+            position: "tc",
+            title: "ログインエラー",
+            message: "メールアドレスかパスワードが間違っています",
+            level: "error"
+        });
     }
 
     handleSubmit(e) {
@@ -36,6 +49,7 @@ class Auth extends Component {
             })
             .catch(err => {
                 console.log(err);
+                this.addNotification();
             });
     }
 
@@ -114,6 +128,7 @@ class Auth extends Component {
                         </Modal.Dialog>
                     </Container>
                 </Col>
+                <NotificationSystem ref={this.notificationSystem} />
             </div>
         );
     }
