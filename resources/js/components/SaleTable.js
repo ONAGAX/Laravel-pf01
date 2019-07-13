@@ -196,8 +196,7 @@ class SaleTable extends Component {
                                 </td>
                                 <td>{ele.goal.toLocaleString()}</td>
                                 <td>
-                                    {/* {ele.sale_deposits.cash.toLocaleString()} */}
-                                    debug
+                                    {ele.sale_deposits.cash.toLocaleString()}
                                 </td>
                                 <td>
                                     {ele.sale_deposits.card.toLocaleString()}
