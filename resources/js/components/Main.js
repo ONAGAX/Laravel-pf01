@@ -16,7 +16,7 @@ class Main extends Component {
     }
     componentDidMount() {
         axios
-            .post("/api/search/", this.state)
+            .get("/api/sale")
             .then(res => {
                 this.setState({ sales: res.data });
             })
@@ -27,7 +27,7 @@ class Main extends Component {
     async handleSelectMonth(e) {
         await this.setState({ dt: e });
         axios
-            .post("/api/search/", this.state)
+            .post("/api/search", this.state)
             .then(res => {
                 this.setState({ sales: res.data });
             })

@@ -49345,7 +49345,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/search/", this.state).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.get("/api/sale").then(function (res) {
         _this2.setState({
           sales: res.data
         });
@@ -49371,7 +49371,7 @@ function (_Component) {
                 });
 
               case 2:
-                axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/search/", this.state).then(function (res) {
+                axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/search", this.state).then(function (res) {
                   _this3.setState({
                     sales: res.data
                   });
@@ -49545,7 +49545,7 @@ function (_Component) {
                   return _this2.setState({
                     redirect: true
                   });
-                }).then(function (err) {
+                }).catch(function (err) {
                   console.log(err);
                 });
 

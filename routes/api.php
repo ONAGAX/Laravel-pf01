@@ -22,7 +22,7 @@ if (App::environment('production')) {
 // });
 
 Route::resource('sale', 'Api\MainController');
-Route::resource('search', 'Api\SearchController');
+Route::post('/search', 'Api\SearchController@index')->name('search.index');
 
 Route::post('/login', 'AuthController@login');
 

@@ -57,7 +57,7 @@ class SaleForm extends Component {
         axios
             .post("/api/sale", this.state)
             .then(() => this.setState({ redirect: true }))
-            .then(err => {
+            .catch(err => {
                 console.log(err);
             });
     }
