@@ -73,7 +73,7 @@ class Edit extends Component {
             .then(res => {
                 this.setState({ redirect: true });
             })
-            .then(err => {
+            .catch(err => {
                 console.log(err);
             });
     }

@@ -48763,7 +48763,7 @@ function (_Component) {
                   _this3.setState({
                     redirect: true
                   });
-                }).then(function (err) {
+                }).catch(function (err) {
                   console.log(err);
                 });
 
