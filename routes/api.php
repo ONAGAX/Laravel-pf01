@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 
+if (App::environment('production')) {
+  URL::forceScheme('https');
+}
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +22,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::resource('sale', 'Api\MainController');
-Route::post('search/', 'Api\SearchController@index');
+Route::post('search/', 'Api\SearchController@index')->name('search.index');
 
 Route::post('/login', 'AuthController@login');
 
