@@ -50410,9 +50410,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_notification_system__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles.scss */ "./resources/js/components/styles.scss");
 /* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50430,7 +50429,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -50476,13 +50474,13 @@ function (_Component) {
       var _this2 = this;
 
       e.preventDefault();
-      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/login", {
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/login", {
         email: this.state.email,
         password: this.state.password
       }).then(function (res) {
         var token = res.data.access_token;
-        axios__WEBPACK_IMPORTED_MODULE_6___default.a.defaults.headers.common["Authorization"] = "Bearer " + token;
-        axios__WEBPACK_IMPORTED_MODULE_6___default.a.get("/api/me").then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_5___default.a.defaults.headers.common["Authorization"] = "Bearer " + token;
+        axios__WEBPACK_IMPORTED_MODULE_5___default.a.get("/api/me").then(function (res) {
           _this2.props.handleGetState(res.data);
         }).catch(function (err) {
           console.log(err);
@@ -50502,8 +50500,8 @@ function (_Component) {
     value: function handleLogout() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/logout").then(function (res) {
-        axios__WEBPACK_IMPORTED_MODULE_6___default.a.defaults.headers.common["Authorization"] = "";
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post("/api/logout").then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_5___default.a.defaults.headers.common["Authorization"] = "";
 
         _this3.setState({
           login: false
@@ -50601,9 +50599,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-notification-system */ "./node_modules/react-notification-system/dist/NotificationSystem.js");
+/* harmony import */ var react_notification_system__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_notification_system__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles.scss */ "./resources/js/components/styles.scss");
+/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50614,13 +50616,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
 
 
 
@@ -50639,6 +50643,8 @@ function (_Component) {
     _classCallCheck(this, Main);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Main).call(this, props));
+    _this.notificationSystem = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.addNotification = _this.addNotification.bind(_assertThisInitialized(_this));
     _this.state = {
       edit: false,
       redirect: false,
@@ -50686,7 +50692,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/sale/" + this.props.match.params.id).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.get("/api/sale/" + this.props.match.params.id).then(function (res) {
         _this2.setState({
           sales: res.data
         });
@@ -50706,29 +50712,66 @@ function (_Component) {
     value: function deleteObject() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_4___default.a.delete("/api/sale/" + this.props.match.params.id).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.delete("/api/sale/" + this.props.match.params.id).then(function (res) {
         _this3.setState({
           redirect: true
         });
       }).catch(function (err) {
         console.log(err);
+
+        _this3.addNotification(2);
       });
+    }
+  }, {
+    key: "addNotification",
+    value: function addNotification(num) {
+      var notification = this.notificationSystem.current;
+
+      if (num == 1) {
+        notification.addNotification({
+          position: "bc",
+          autoDismiss: 10,
+          level: "warning",
+          children: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+            style: {
+              textAlign: "center",
+              fontWeight: "bold"
+            }
+          }, "\u6D88\u53BB\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"], {
+            className: "justify-content-md-center"
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+            variant: "secondary",
+            onClick: this.deleteObject.bind(this)
+          }, "\u6D88\u53BB\u3059\u308B")))
+        });
+      } else if (num == 2) {
+        notification.addNotification({
+          position: "tc",
+          title: "Deleteエラー",
+          message: "消去できませんでした",
+          level: "error"
+        });
+      }
     }
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       var sales = this.state.sales;
 
       if (this.state.edit) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["Redirect"], {
           to: "/sale/" + this.props.match.params.id + "/edit"
         });
       } else if (this.state.redirect) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["Redirect"], {
           to: "/"
         });
       } else {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Header, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, sales.dt, "\u306E\u65E5\u5831\u8A73\u7D30")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "Detail"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Dialog, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Header, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, sales.dt, "\u306E\u65E5\u5831\u8A73\u7D30")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
           responsive: "sm"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u8FBC\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u91D1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u7A0E\u8FBC\u58F2\u4E0A"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\u65E5\u8A08"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.price + sales.tax).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.tax + 0).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.price + 0).toLocaleString())))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"], {
           responsive: "sm"
@@ -50740,11 +50783,15 @@ function (_Component) {
           responsive: "sm"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u58F2\u4E0A"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u5BA2\u5358\u4FA1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\u4EBA\u6570\u3000\u3000"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Dinner"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", (sales.dinner + 0).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "\xA5", Math.round(sales.dinner / sales.dinnerPeople).toLocaleString()), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, sales.dinnerPeople, "\u4EBA"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "secondary",
-          onClick: this.deleteObject.bind(this)
+          onClick: function onClick(e) {
+            _this4.addNotification(1);
+          }
         }, "\u6D88\u53BB\u3059\u308B"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
           variant: "primary",
           onClick: this.changeState.bind(this)
-        }, "\u518D\u7DE8\u96C6\u3059\u308B"))));
+        }, "\u518D\u7DE8\u96C6\u3059\u308B"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_notification_system__WEBPACK_IMPORTED_MODULE_3___default.a, {
+          ref: this.notificationSystem
+        }));
       }
     }
   }]);

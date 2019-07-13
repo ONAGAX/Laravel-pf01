@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import { Form, Col, Button, Container, Modal } from "react-bootstrap";
 import NotificationSystem from "react-notification-system";
 import styles from "./styles.scss";
-
-import { Router, Link } from "react-router-dom";
 import Axios from "axios";
 
 class Auth extends Component {

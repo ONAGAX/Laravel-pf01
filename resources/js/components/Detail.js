@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Modal, Button, Table } from "react-bootstrap";
+import { Modal, Button, Table, Row } from "react-bootstrap";
+import NotificationSystem from "react-notification-system";
 import { Redirect } from "react-router-dom";
+import styles from "./styles.scss";
 import axios from "axios";
 
 class Main extends Component {
     constructor(props) {
         super(props);
+        this.notificationSystem = React.createRef();
+        this.addNotification = this.addNotification.bind(this);
         this.state = {
             edit: false,
             redirect: false,
@@ -71,7 +75,41 @@ class Main extends Component {
             })
             .catch(err => {
                 console.log(err);
+                this.addNotification(2);
             });
+    }
+
+    addNotification(num) {
+        const notification = this.notificationSystem.current;
+        if (num == 1) {
+            notification.addNotification({
+                position: "bc",
+                autoDismiss: 10,
+                level: "warning",
+                children: (
+                    <div>
+                        <h6 style={{ textAlign: "center", fontWeight: "bold" }}>
+                            消去してもよろしいですか？
+                        </h6>
+                        <Row className="justify-content-md-center">
+                            <Button
+                                variant="secondary"
+                                onClick={this.deleteObject.bind(this)}
+                            >
+                                消去する
+                            </Button>
+                        </Row>
+                    </div>
+                )
+            });
+        } else if (num == 2) {
+            notification.addNotification({
+                position: "tc",
+                title: "Deleteエラー",
+                message: "消去できませんでした",
+                level: "error"
+            });
+        }
     }
 
     render() {
@@ -86,7 +124,7 @@ class Main extends Component {
             return <Redirect to={"/"} />;
         } else {
             return (
-                <div>
+                <div className="Detail">
                     <Modal.Dialog>
                         <Modal.Header>
                             <Modal.Title>{sales.dt}の日報詳細</Modal.Title>
@@ -245,7 +283,9 @@ class Main extends Component {
                         <Modal.Footer>
                             <Button
                                 variant="secondary"
-                                onClick={this.deleteObject.bind(this)}
+                                onClick={e => {
+                                    this.addNotification(1);
+                                }}
                             >
                                 消去する
                             </Button>
@@ -257,6 +297,7 @@ class Main extends Component {
                             </Button>
                         </Modal.Footer>
                     </Modal.Dialog>
+                    <NotificationSystem ref={this.notificationSystem} />
                 </div>
             );
         }
