@@ -16,7 +16,7 @@ class Main extends Component {
     }
     componentDidMount() {
         axios
-            .post("https://laravelpf01.herokuapp.com/api/search/", this.state)
+            .post("/api/search/", this.state)
             .then(res => {
                 this.setState({ sales: res.data });
             })

@@ -17,8 +17,9 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+Route::post('search', 'Api\MainController@search')->name('sale.search');
 Route::resource('sale', 'Api\MainController');
-Route::post('search/', 'Api\SearchController@index');
+// Route::post('search/', 'Api\SearchController@index');
 
 Route::post('/login', 'AuthController@login');
 

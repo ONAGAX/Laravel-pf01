@@ -49345,7 +49345,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("https://laravelpf01.herokuapp.com/api/search/", this.state).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_6___default.a.post("/api/search/", this.state).then(function (res) {
         _this2.setState({
           sales: res.data
         });
