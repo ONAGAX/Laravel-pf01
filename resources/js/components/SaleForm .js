@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Form, Col, Button } from "react-bootstrap";
 import { Link, Route, Redirect } from "react-router-dom";
+import NotificationSystem from "react-notification-system";
 import axios from "axios";
 
 class SaleForm extends Component {
     constructor() {
         super();
+        this.notificationSystem = React.createRef();
+        this.addNotification = this.addNotification.bind(this);
         this.state = {
             redirect: false,
             validated: false,
@@ -59,6 +62,7 @@ class SaleForm extends Component {
             .then(() => this.setState({ redirect: true }))
             .catch(err => {
                 console.log(err);
+                this.addNotification(1);
             });
     }
 
@@ -152,6 +156,21 @@ class SaleForm extends Component {
     handleOnInput(e, n) {
         if (e.target.value.length > n) {
             e.target.value = e.target.value.slice(0, n);
+        }
+    }
+
+    addNotification(num) {
+        const notification = this.notificationSystem.current;
+        switch (num) {
+            case 1:
+                notification.addNotification({
+                    position: "tc",
+                    title: "保存エラー",
+                    message:
+                        "データーベースに保存できませんでした(日付を確認してください)",
+                    level: "error"
+                });
+                return;
         }
     }
 
@@ -529,6 +548,7 @@ class SaleForm extends Component {
                         日報送信
                     </Button>
                 </Form>
+                <NotificationSystem ref={this.notificationSystem} />
             </div>
         );
     }

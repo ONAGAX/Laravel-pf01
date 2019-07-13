@@ -18,6 +18,7 @@
 -   npm axios
 -   npm react-bootstrap
 -   npm react-paginate
+-   npm react-notification-system
 
 ## 実装予定
 
