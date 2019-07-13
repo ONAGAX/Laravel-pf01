@@ -21,7 +21,6 @@ class Index extends Component {
     getState(ele) {
         this.setState({ currentUser: ele, isLogin: true });
     }
-
     handleLogout() {
         Axios.post("/api/logout")
             .then(res => {
@@ -32,7 +31,6 @@ class Index extends Component {
                 console.log(err);
             });
     }
-
     ImportWindowOpen() {
         window.open("sales", "window1", "width=300,height=150,scrollbars=1");
     }

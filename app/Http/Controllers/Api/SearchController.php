@@ -8,6 +8,7 @@ use App\Sale;
 
 class SearchController extends Controller
 {
+    // 2019年のみの検索に対応している、elseのarray[0]がYYYYなのでwhereYear追加する
     public function index(Request $request)
     {
         $keyword = $request->input('dt');

@@ -69,6 +69,10 @@ class SaleTable extends Component {
     handleReverce() {
         this.setState({ isOrder: !this.state.isOrder });
     }
+    handleSelectChange(e) {
+        this.setState({ select: false });
+        this.props.handleSelect(e.target.value);
+    }
 
     render() {
         let list;
@@ -85,7 +89,6 @@ class SaleTable extends Component {
         if (this.state.isOrder) {
             orderHtml = (
                 <Button
-                    style={{ marginLeft: "15px" }}
                     variant="outline-success"
                     onClick={e => {
                         this.handleSortByAsc();
@@ -97,7 +100,6 @@ class SaleTable extends Component {
         } else {
             orderHtml = (
                 <Button
-                    style={{ marginLeft: "15px" }}
                     variant="outline-success"
                     onClick={e => {
                         this.handleSortByDesc();
@@ -107,25 +109,58 @@ class SaleTable extends Component {
                 </Button>
             );
         }
+        const options = [
+            "2019-01",
+            "2019-02",
+            "2019-03",
+            "2019-04",
+            "2019-05",
+            "2019-06",
+            "2019-07",
+            "2019-08"
+        ];
+        let optionsHtml = options.map((ele, index) => (
+            <option key={index} value={ele}>
+                {ele}
+            </option>
+        ));
 
         return (
             <div>
                 <Form ref={this.form}>
-                    <Form.Group as={Col} md="4" controlId="validationCustom01">
-                        <Form.Label>日付検索</Form.Label>
-                        <Form.Control
-                            required
-                            type="number"
-                            onChange={e => {
-                                this.handleFilter(e.target.value);
-                            }}
-                            placeholder="例)0501"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group
+                            as={Col}
+                            md="3"
+                            controlId="validationCustom01"
+                        >
+                            <Form.Label>日付検索</Form.Label>
+                            <Form.Control
+                                required
+                                type="number"
+                                onChange={e => {
+                                    this.handleFilter(e.target.value);
+                                }}
+                                placeholder="例)0501"
+                            />
+                        </Form.Group>
+                        <Form.Group as={Col} md="3" controlId="formGridState">
+                            <Form.Label>月を選択</Form.Label>
+                            <Form.Control
+                                as="select"
+                                onChange={e => {
+                                    this.handleSelectChange(e);
+                                }}
+                                // onChange={this.changeSelectFalse()}
+                            >
+                                {optionsHtml}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form.Row>
 
                     {orderHtml}
                     <Button
-                        style={{ marginLeft: "10px" }}
+                        style={{ marginLeft: "15px" }}
                         variant="outline-secondary"
                         onClick={e => {
                             this.handleClear();

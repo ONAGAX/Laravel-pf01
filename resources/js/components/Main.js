@@ -11,11 +11,21 @@ class Main extends Component {
         super();
         this.state = {
             sales: [],
-            dt: ""
+            dt: "2019-06"
         };
     }
-
     componentDidMount() {
+        axios
+            .post("/api/search/", this.state)
+            .then(res => {
+                this.setState({ sales: res.data });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+    async handleSelectMonth(e) {
+        await this.setState({ dt: e });
         axios
             .post("/api/search/", this.state)
             .then(res => {
@@ -29,7 +39,12 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <SaleTable data={this.state.sales} />
+                <SaleTable
+                    data={this.state.sales}
+                    handleSelect={e => {
+                        this.handleSelectMonth(e);
+                    }}
+                />
             </div>
         );
     }
