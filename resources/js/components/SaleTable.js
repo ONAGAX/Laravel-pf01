@@ -151,7 +151,6 @@ class SaleTable extends Component {
                                 onChange={e => {
                                     this.handleSelectChange(e);
                                 }}
-                                // onChange={this.changeSelectFalse()}
                             >
                                 {optionsHtml}
                             </Form.Control>
@@ -197,7 +196,8 @@ class SaleTable extends Component {
                                 </td>
                                 <td>{ele.goal.toLocaleString()}</td>
                                 <td>
-                                    {ele.sale_deposits.cash.toLocaleString()}
+                                    {/* {ele.sale_deposits.cash.toLocaleString()} */}
+                                    debug
                                 </td>
                                 <td>
                                     {ele.sale_deposits.card.toLocaleString()}
